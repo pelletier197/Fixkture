@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 
 class GenerateFixtureAction : AnAction() {
-    override fun actionPerformed(p0: AnActionEvent) {
+    override fun actionPerformed(event: AnActionEvent) {
         TODO("Not yet implemented")
     }
 }
