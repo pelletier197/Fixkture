@@ -1,0 +1,39 @@
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.4.10"
+    id("org.jetbrains.intellij") version "0.6.3"
+    id("org.jetbrains.changelog") version "0.6.2"
+    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+}
+
+group = "io.github.pelletier197"
+version = "1.0.0"
+
+sourceCompatibility = "11"
+targetCompatibility = "11"
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+
+// Configure gradle-intellij-plugin plugin.
+// Read more: https://github.com/JetBrains/gradle-intellij-plugin
+intellij {
+    pluginName = "Kotlin fixture generator"
+    version = "IC-2017.2.5"
+    type = "IC"
+    updateSinceUntilBuild = true
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
