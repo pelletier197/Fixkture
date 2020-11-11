@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Kotlin-fixture-generator.iml" filepath="$PROJECT_DIR$/Kotlin-fixture-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Intellij-Kotlin-fixture-generator.iml" filepath="$PROJECT_DIR$/Intellij-Kotlin-fixture-generator.iml" />
     </modules>
   </component>
 </project>
