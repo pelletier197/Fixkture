@@ -4,8 +4,7 @@
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Kotlin and Java Fixture Generator. This plugin allow you to generate a fixture of any desired class. Fields of this class will be given arbitrary values when being generated.<br>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
