@@ -1,0 +1,24 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "1.4.10"
+    id 'org.jetbrains.intellij' version '0.6.3'
+    id 'org.jetbrains.changelog' version '0.6.2'
+    id 'org.jlleitschuh.gradle.ktlint' version '9.4.1'
+}
+
+group 'io.github.pelletier197'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+intellij {
+    version '2020.2.3'
+}
+
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}

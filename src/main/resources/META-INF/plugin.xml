@@ -1,0 +1,14 @@
+<idea-plugin>
+    <id>org.example.fixture</id>
+    <name>Fixkture</name>
+    <vendor url="https://github.com/pelletier197">pelletier197</vendor>
+
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+</idea-plugin>
