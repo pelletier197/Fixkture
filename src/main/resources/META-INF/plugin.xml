@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>org.example.fixture</id>
+    <id>io.github.pelletier197.fixkture</id>
     <name>Fixkture</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 
