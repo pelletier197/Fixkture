@@ -7,6 +7,7 @@ import com.intellij.openapi.command.CommandProcessor
 import com.intellij.psi.*
 import com.intellij.psi.codeStyle.JavaCodeStyleManager
 import com.intellij.psi.util.PsiUtil
+import com.intellij.refactoring.extractMethod.newImpl.ExtractMethodHelper.addSiblingAfter
 import io.github.pelletier197.fixkture.api.java.selectTargetConstructor
 import io.github.pelletier197.fixkture.api.java.selectTargetTargetClass
 import org.jetbrains.kotlin.idea.kdoc.insert
@@ -33,7 +34,7 @@ class GenerateFixtureAction : AnAction() {
 
         CommandProcessor.getInstance().executeCommand(project, {
             val element = event.getData(CommonDataKeys.PSI_FILE)?.findElementAt(event.getData(CommonDataKeys.CARET)!!.caretModel.offset)!!
-            element.replace(statement)
+            element.addSiblingAfter(statement)
             JavaCodeStyleManager.getInstance(project).shortenClassReferences(element)
         }, "Generate fixture", null)
     }
