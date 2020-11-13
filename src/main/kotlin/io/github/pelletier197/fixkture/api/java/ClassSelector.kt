@@ -2,13 +2,11 @@ package io.github.pelletier197.fixkture.api.java
 
 import com.intellij.codeInsight.generation.ClassMember
 import com.intellij.codeInsight.generation.PsiMethodMember
-import com.intellij.ide.util.MemberChooser
 import com.intellij.ide.util.MemberChooserBuilder
 import com.intellij.ide.util.TreeClassChooserFactory
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
-import org.jetbrains.annotations.NotNull
 
 fun selectTargetTargetClass(project: Project): PsiClass? {
     val classChooserFactory = TreeClassChooserFactory.getInstance(project)

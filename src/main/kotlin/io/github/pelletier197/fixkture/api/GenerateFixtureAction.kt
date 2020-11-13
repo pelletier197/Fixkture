@@ -12,6 +12,8 @@ import com.intellij.psi.util.elementType
 import com.intellij.util.DocumentUtil
 import io.github.pelletier197.fixkture.api.java.selectTargetConstructor
 import io.github.pelletier197.fixkture.api.java.selectTargetTargetClass
+import org.jetbrains.kotlin.idea.highlighter.KotlinPsiChecker
+import org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade
 
 class GenerateFixtureAction : AnAction() {
     override fun update(event: AnActionEvent) {

@@ -30,7 +30,7 @@ repositories {
 intellij {
     version '2020.2.3'
     type 'IC'
-    plugins = ['java']
+    plugins = ['java', 'Kotlin']
 }
 
 patchPluginXml {
