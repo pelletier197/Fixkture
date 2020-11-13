@@ -12,6 +12,8 @@ import com.intellij.psi.util.PsiUtil
 import com.intellij.refactoring.extractMethod.newImpl.ExtractMethodHelper.addSiblingAfter
 import io.github.pelletier197.fixkture.api.java.selectTargetConstructor
 import io.github.pelletier197.fixkture.api.java.selectTargetTargetClass
+import io.github.pelletier197.fixkture.domain.ClassInstantiationStatementBuilderContext
+import io.github.pelletier197.fixkture.domain.RecursiveClassInstantiationStatementGeneratorFactory
 import org.jetbrains.kotlin.idea.kdoc.insert
 
 class GenerateFixtureAction : AnAction() {
@@ -23,18 +25,24 @@ class GenerateFixtureAction : AnAction() {
         val project = event.project!!
 
         val targetClass = selectTargetTargetClass(project) ?: return
-        val targetConstructor = selectTargetConstructor(targetClass, project) ?: return
+//        val targetConstructor = selectTargetConstructor(targetClass, project) ?: return
+//
+//        val factory = PsiElementFactory.getInstance(project)
+//
+//        val statement = factory.createStatementFromText("public static final ${targetClass.qualifiedName} ${targetClass.name!!.decapitalize()} = new ${targetClass.qualifiedName}();", event.parentElement)
+//        val element = event.currentElement!!
 
-        val factory = PsiElementFactory.getInstance(project)
-
-        val statement = factory.createStatementFromText("public static final ${targetClass.qualifiedName} ${targetClass.name!!.decapitalize()} = new ${targetClass.qualifiedName}();", event.parentElement)
-        val element = event.currentElement!!
-
-        WriteCommandAction.runWriteCommandAction(project) {
-            val addedElement = element.addSiblingAfter(statement)
-            CodeStyleManager.getInstance(project).reformat(addedElement)
-            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
-        }
+        RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
+                context = ClassInstantiationStatementBuilderContext(
+                        targetClass = targetClass,
+                        constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
+                )
+        )
+//        WriteCommandAction.runWriteCommandAction(project) {
+//            val addedElement = element.addSiblingAfter(statement)
+//            CodeStyleManager.getInstance(project).reformat(addedElement)
+//            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
+//        }
     }
 }
 
