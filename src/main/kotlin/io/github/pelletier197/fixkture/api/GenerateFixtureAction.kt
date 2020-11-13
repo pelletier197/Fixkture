@@ -4,7 +4,9 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.CommandProcessor
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.psi.*
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.codeStyle.JavaCodeStyleManager
 import com.intellij.psi.util.PsiUtil
 import com.intellij.refactoring.extractMethod.newImpl.ExtractMethodHelper.addSiblingAfter
@@ -25,18 +27,14 @@ class GenerateFixtureAction : AnAction() {
 
         val factory = PsiElementFactory.getInstance(project)
 
-        val targetType = JavaPsiFacade.getElementFactory(project).createType(targetClass)
-        val statement = factory.createVariableDeclarationStatement(targetType.name.decapitalize(), targetType, factory.createExpressionFromText("new ${targetClass.qualifiedName}()", null))
-        PsiUtil.setModifierProperty(statement.declaredElements[0] as PsiVariable, PsiModifier.FINAL, true)
-        PsiUtil.setModifierProperty(statement.declaredElements[0] as PsiVariable, PsiModifier.PUBLIC, true)
-        PsiUtil.setModifierProperty(statement.declaredElements[0] as PsiVariable, PsiModifier.STATIC, true)
+        val statement = factory.createStatementFromText("public static final ${targetClass.qualifiedName} ${targetClass.name!!.decapitalize()} = new ${targetClass.qualifiedName}();", event.parentElement)
+        val element = event.currentElement!!
 
-
-        CommandProcessor.getInstance().executeCommand(project, {
-            val element = event.getData(CommonDataKeys.PSI_FILE)?.findElementAt(event.getData(CommonDataKeys.CARET)!!.caretModel.offset)!!
-            element.addSiblingAfter(statement)
-            JavaCodeStyleManager.getInstance(project).shortenClassReferences(element)
-        }, "Generate fixture", null)
+        WriteCommandAction.runWriteCommandAction(project) {
+            val addedElement = element.addSiblingAfter(statement)
+            CodeStyleManager.getInstance(project).reformat(addedElement)
+            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
+        }
     }
 }
 
