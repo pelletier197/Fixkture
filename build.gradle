@@ -7,6 +7,20 @@ plugins {
 
 group 'io.github.pelletier197'
 version '1.0.0'
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
 
 repositories {
     mavenCentral()
