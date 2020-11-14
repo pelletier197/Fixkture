@@ -1,5 +1,6 @@
 package io.github.pelletier197.fixkture.domain
 
+import io.github.pelletier197.fixkture.domain.generator.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
 
 data class FieldConstructionContext(
@@ -25,6 +26,14 @@ fun createInstantiationField(context: ClassInstantiationStatementBuilderContext)
         "Byte", "java.lang.Byte" -> PrimitiveGenerator.generateByte()
         "Char", "java.lang.Character" -> PrimitiveGenerator.generateChar()
         "String", "java.lang.String" -> PrimitiveGenerator.generateString(context)
+        "UUID", "java.lang.UUID" -> PrimitiveGenerator.generateUUID()
+        "Instant", "java.time.Instant" -> JavaTimeGenerator.generateInstant()
+        "ZonedDateTime", "java.time.ZonedDateTime" -> JavaTimeGenerator.generateZoneDateTime()
+        "ZoneId", "java.time.ZoneId" -> JavaTimeGenerator.generateZoneId()
+        "LocalDate", "java.time.LocalDate" -> JavaTimeGenerator.generateLocalDate()
+        "LocalDateTime", "java.time.LocalDateTime" -> JavaTimeGenerator.generateLocalDateTime()
+        "LocalTime", "java.time.LocalTime" -> JavaTimeGenerator.generateLocalTime()
+        "Period", "java.time.Period" -> JavaTimeGenerator.generatePeriod()
     }
 
     TODO()

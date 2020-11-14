@@ -9,35 +9,39 @@ object PrimitiveGenerator {
     private val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()
 
     fun generateBoolean(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextBoolean().toString() }
+        return RegularCallbackClassInstantiationField { Random.nextBoolean().toString() }
     }
 
     fun generateInteger(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextInt(0, 5000).toString() }
+        return RegularCallbackClassInstantiationField { Random.nextInt(0, 5000).toString() }
     }
 
     fun generateLong(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextLong(0, 100_000).toString() }
+        return RegularCallbackClassInstantiationField { Random.nextLong(0, 100_000).toString() }
     }
 
     fun generateFloat(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextFloat().toString() }
+        return RegularCallbackClassInstantiationField { Random.nextFloat().toString() }
     }
 
     fun generateDouble(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextDouble().toString() }
+        return RegularCallbackClassInstantiationField { Random.nextDouble().toString() }
     }
 
     fun generateByte(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { Random.nextBytes(1)[0].toString() }
+        return RegularCallbackClassInstantiationField { Random.nextBytes(1)[0].toString() }
     }
 
     fun generateChar(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { "'${Random.nextInt(0, charPool.size).toChar()}'" }
+        return RegularCallbackClassInstantiationField { "'${Random.nextInt(0, charPool.size).toChar()}'" }
     }
 
     fun generateString(context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField() { "\"${toSnakeCase(context.targetClass.name!!)}\"" }
+        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(context.targetClass.name!!)}\"" }
+    }
+
+    fun generateUUID(): InstantiationFieldBuilder {
+        return RegularCallbackClassInstantiationField { "java.util.UUID.randomUUID()" }
     }
 
     private fun toSnakeCase(value: String): String {
