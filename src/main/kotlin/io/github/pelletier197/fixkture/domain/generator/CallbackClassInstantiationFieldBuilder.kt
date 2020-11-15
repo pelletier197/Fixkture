@@ -46,9 +46,3 @@ class RegularCallbackClassInstantiationField(
         )
 )
 
-class NullInstantiationField() : CallbackClassInstantiationFieldBuilder(
-        LanguageCallbackValueGenerator(
-                java = { "null" },
-                kotlin = { "null" }
-        )
-)
