@@ -5,7 +5,6 @@ import io.github.pelletier197.fixkture.domain.FieldConstructionContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 
 
-
 typealias ClassFieldGeneratorCallback = (FieldConstructionContext) -> String
 
 data class LanguageCallbackValueGenerator(
@@ -44,5 +43,12 @@ class RegularCallbackClassInstantiationField(
         LanguageCallbackValueGenerator(
                 java = callback,
                 kotlin = callback
+        )
+)
+
+class NullInstantiationField() : CallbackClassInstantiationFieldBuilder(
+        LanguageCallbackValueGenerator(
+                java = { "null" },
+                kotlin = { "null" }
         )
 )
