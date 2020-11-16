@@ -15,6 +15,33 @@ class NullInstantiationField : CallbackClassInstantiationFieldBuilder(
         )
 )
 
+class ClassParameterInstantiationField(
+        private val parameter: PsiParameter,
+        private val instantiationField: InstantiationFieldBuilder
+) : InstantiationFieldBuilder {
+    override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
+        return instantiationField.asJavaConstructorArgument(modifyContext(context))
+    }
+
+    override fun asKotlinConstructorArgument(context: FieldConstructionContext): String {
+        return asKotlinConstructorArgument(modifyContext(context))
+    }
+
+    override fun asJavaFlatValue(context: FieldConstructionContext): String {
+        return instantiationField.asJavaFlatValue(modifyContext(context))
+    }
+
+    override fun asKotlinFlatValue(context: FieldConstructionContext): String {
+        return instantiationField.asKotlinFlatValue(modifyContext(context))
+    }
+
+    private fun modifyContext(context: FieldConstructionContext): FieldConstructionContext {
+        return context.copy(
+                fieldName = parameter.name
+        )
+    }
+}
+
 class ClassInstantiationField(
         val targetClass: PsiClass,
         val argumentsFields: List<InstantiationFieldBuilder>
@@ -55,9 +82,14 @@ object ClassGenerator {
                                                          context: ClassInstantiationStatementBuilderContext
     ): InstantiationFieldBuilder {
         // TODO - this should support for list creation, array creation, etc.. not use PSiUtil.resolveClassInType
-        return when (val psiClass = PsiUtil.resolveClassInType(psiParameter.type)) {
+        val instantiationField = when (val psiClass = PsiUtil.resolveClassInType(psiParameter.type)) {
             null -> NullInstantiationField()
             else -> createInstantiationField(context.copy(targetClass = psiClass))
         }
+
+        return ClassParameterInstantiationField(
+                parameter = psiParameter,
+                instantiationField = instantiationField
+        )
     }
 }

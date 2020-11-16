@@ -27,22 +27,24 @@ class GenerateFixtureAction : AnAction() {
         val targetClass = selectTargetTargetClass(project) ?: return
 //        val targetConstructor = selectTargetConstructor(targetClass, project) ?: return
 //
-//        val factory = PsiElementFactory.getInstance(project)
 //
 //        val statement = factory.createStatementFromText("public static final ${targetClass.qualifiedName} ${targetClass.name!!.decapitalize()} = new ${targetClass.qualifiedName}();", event.parentElement)
-//        val element = event.currentElement!!
 
-        RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
+        val factory = PsiElementFactory.getInstance(project)
+        val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
                 context = ClassInstantiationStatementBuilderContext(
                         targetClass = targetClass,
                         constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
                 )
         )
-//        WriteCommandAction.runWriteCommandAction(project) {
-//            val addedElement = element.addSiblingAfter(statement)
-//            CodeStyleManager.getInstance(project).reformat(addedElement)
-//            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
-//        }
+        val statement = factory.createStatementFromText(statementGenerator.createJavaStatement(), event.parentElement)
+
+        val element = event.currentElement!!
+        WriteCommandAction.runWriteCommandAction(project) {
+            val addedElement = element.addSiblingAfter(statement)
+            CodeStyleManager.getInstance(project).reformat(addedElement)
+            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
+        }
     }
 }
 
