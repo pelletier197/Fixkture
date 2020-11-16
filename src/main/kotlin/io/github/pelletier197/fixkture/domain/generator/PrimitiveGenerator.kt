@@ -33,7 +33,7 @@ object PrimitiveGenerator {
     }
 
     fun generateChar(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField { "'${Random.nextInt(0, charPool.size).toChar()}'" }
+        return RegularCallbackClassInstantiationField { "'${charPool[Random.nextInt(0, charPool.size)]}'" }
     }
 
     fun generateString(context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {

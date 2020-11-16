@@ -25,10 +25,6 @@ class GenerateFixtureAction : AnAction() {
         val project = event.project!!
 
         val targetClass = selectTargetTargetClass(project) ?: return
-//        val targetConstructor = selectTargetConstructor(targetClass, project) ?: return
-//
-//
-//        val statement = factory.createStatementFromText("public static final ${targetClass.qualifiedName} ${targetClass.name!!.decapitalize()} = new ${targetClass.qualifiedName}();", event.parentElement)
 
         val factory = PsiElementFactory.getInstance(project)
         val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
