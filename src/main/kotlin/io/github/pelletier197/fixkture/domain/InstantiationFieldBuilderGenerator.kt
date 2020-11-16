@@ -1,5 +1,7 @@
 package io.github.pelletier197.fixkture.domain
 
+import com.intellij.lang.jvm.types.JvmType
+import com.intellij.psi.PsiType
 import io.github.pelletier197.fixkture.domain.generator.ClassGenerator
 import io.github.pelletier197.fixkture.domain.generator.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
@@ -41,7 +43,7 @@ fun createInstantiationField(context: ClassInstantiationStatementBuilderContext)
     TODO()
 }
 
-fun createInstantiationField(context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {
+fun createInstantiationField(type: JvmType, context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {
     val psiClass = context.targetClass
 
     when (psiClass.qualifiedName) {
