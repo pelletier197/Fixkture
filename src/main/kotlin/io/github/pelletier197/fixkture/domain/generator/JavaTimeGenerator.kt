@@ -8,13 +8,13 @@ import kotlin.random.Random
 object JavaTimeGenerator {
     fun generateInstant(): InstantiationFieldBuilder {
         return RegularCallbackClassInstantiationField {
-            "java.time.Instant.parse(\"$${generateRandomInstant()}\")"
+            "java.time.Instant.parse(\"${generateRandomInstant()}\")"
         }
     }
 
     fun generateZoneDateTime(): InstantiationFieldBuilder {
         return RegularCallbackClassInstantiationField {
-            "java.time.ZonedDateTime.parse(\"$${generateRandomInstant().atZone(generateRandomZoneId())}\")"
+            "java.time.ZonedDateTime.parse(\"${generateRandomInstant().atZone(generateRandomZoneId())}\")"
         }
     }
 
@@ -63,7 +63,7 @@ object JavaTimeGenerator {
     private fun generateRandomInstant(): Instant {
         return Instant.ofEpochMilli(
                 Random.nextLong(
-                        from = Instant.now().minus(1, ChronoUnit.YEARS).toEpochMilli(),
+                        from = Instant.now().minus(365, ChronoUnit.DAYS).toEpochMilli(),
                         until = Instant.now().toEpochMilli()
                 )
         )

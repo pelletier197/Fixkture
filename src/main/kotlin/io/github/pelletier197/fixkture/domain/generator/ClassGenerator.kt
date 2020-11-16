@@ -24,7 +24,7 @@ class ClassParameterInstantiationField(
     }
 
     override fun asKotlinConstructorArgument(context: FieldConstructionContext): String {
-        return asKotlinConstructorArgument(modifyContext(context))
+        return instantiationField.asKotlinConstructorArgument(modifyContext(context))
     }
 
     override fun asJavaFlatValue(context: FieldConstructionContext): String {

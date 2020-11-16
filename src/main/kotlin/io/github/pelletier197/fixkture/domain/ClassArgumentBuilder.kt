@@ -11,7 +11,7 @@ class InstantiationStatementGenerator(private val targetClass: PsiClass,
 
     fun createJavaStatement(): String {
         val context = getFieldConstructionContext()
-        return "public static final ${targetClass.qualifiedName} ${context.fieldName} = new ${fieldBuilder.asKotlinFlatValue(context)}"
+        return "public static final ${targetClass.qualifiedName} ${context.fieldName} = ${fieldBuilder.asJavaFlatValue(context)};"
     }
 
     private fun generateFieldName(): String {

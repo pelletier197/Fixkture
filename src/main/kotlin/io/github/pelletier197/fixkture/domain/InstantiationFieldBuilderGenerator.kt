@@ -2,6 +2,7 @@ package io.github.pelletier197.fixkture.domain
 
 import com.intellij.lang.jvm.types.JvmType
 import com.intellij.psi.PsiType
+import com.intellij.psi.util.elementType
 import io.github.pelletier197.fixkture.domain.generator.ClassGenerator
 import io.github.pelletier197.fixkture.domain.generator.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
@@ -29,7 +30,7 @@ fun createInstantiationField(context: ClassInstantiationStatementBuilderContext)
         "Byte", "java.lang.Byte" -> PrimitiveGenerator.generateByte()
         "Char", "java.lang.Character" -> PrimitiveGenerator.generateChar()
         "String", "java.lang.String" -> PrimitiveGenerator.generateString(context)
-        "UUID", "java.lang.UUID" -> PrimitiveGenerator.generateUUID()
+        "UUID", "java.util.UUID" -> PrimitiveGenerator.generateUUID()
         "Instant", "java.time.Instant" -> JavaTimeGenerator.generateInstant()
         "ZonedDateTime", "java.time.ZonedDateTime" -> JavaTimeGenerator.generateZoneDateTime()
         "ZoneId", "java.time.ZoneId" -> JavaTimeGenerator.generateZoneId()
