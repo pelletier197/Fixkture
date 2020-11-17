@@ -13,12 +13,23 @@ import com.intellij.refactoring.extractMethod.newImpl.ExtractMethodHelper.addSib
 import io.github.pelletier197.fixkture.api.java.selectTargetConstructor
 import io.github.pelletier197.fixkture.api.java.selectTargetTargetClass
 import io.github.pelletier197.fixkture.domain.ClassInstantiationStatementBuilderContext
+import io.github.pelletier197.fixkture.domain.InstantiationStatementGenerator
 import io.github.pelletier197.fixkture.domain.RecursiveClassInstantiationStatementGeneratorFactory
+import org.jetbrains.kotlin.idea.core.ShortenReferences
+import org.jetbrains.kotlin.idea.debugger.sequence.trace.dsl.KotlinStatementFactory
+import org.jetbrains.kotlin.idea.formatter.KotlinStyleGuideCodeStyle
 import org.jetbrains.kotlin.idea.kdoc.insert
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
+import org.jetbrains.kotlin.psi.KtPsiUtil
 
 class GenerateFixtureAction : AnAction() {
     override fun update(event: AnActionEvent) {
-        event.presentation.isEnabledAndVisible = event.project != null && event.editor != null
+        event.presentation.isEnabledAndVisible = event.project != null
+                && event.editor != null
+                && event.file != null
+                && event.file!!.isWritable
     }
 
     override fun actionPerformed(event: AnActionEvent) {
@@ -26,21 +37,45 @@ class GenerateFixtureAction : AnAction() {
 
         val targetClass = selectTargetTargetClass(project) ?: return
 
-        val factory = PsiElementFactory.getInstance(project)
         val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
                 context = ClassInstantiationStatementBuilderContext(
                         targetClass = targetClass,
                         constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
                 )
         )
-        val statement = factory.createStatementFromText(statementGenerator.createJavaStatement(), event.parentElement)
 
-        val element = event.currentElement!!
+        val statement = createStatement(event = event, generator = statementGenerator) ?: return
+
+        val element = event.currentElement
+        val file = event.file!!
+
         WriteCommandAction.runWriteCommandAction(project) {
-            val addedElement = element.addSiblingAfter(statement)
-            CodeStyleManager.getInstance(project).reformat(addedElement)
-            JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
+            val addedElement = element?.addSiblingAfter(statement) ?: event.file!!.add(statement)
+
+            if (event.file!!.isJava()) {
+                JavaCodeStyleManager.getInstance(project).shortenClassReferences(addedElement)
+            } else if (event.file!!.isKotlin()) {
+                ShortenReferences.DEFAULT.process(file as KtFile)
+            }
         }
+    }
+
+    private fun createStatement(event: AnActionEvent, generator: InstantiationStatementGenerator): PsiElement? {
+        val project = event.project!!
+        val file = event.file!!
+
+
+        if (file.isJava()) {
+            val factory = PsiElementFactory.getInstance(project)
+            return factory.createStatementFromText(generator.createJavaStatement(), event.parentElement)
+        }
+
+        if (file.isKotlin()) {
+            val factory = KtPsiFactory(project)
+            return factory.createDeclaration(generator.createKotlinStatement())
+        }
+
+        return null
     }
 }
 
