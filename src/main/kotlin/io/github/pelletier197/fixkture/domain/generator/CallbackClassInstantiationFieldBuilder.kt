@@ -1,6 +1,5 @@
 package io.github.pelletier197.fixkture.domain.generator
 
-import io.github.pelletier197.fixkture.domain.ClassInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.FieldConstructionContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 

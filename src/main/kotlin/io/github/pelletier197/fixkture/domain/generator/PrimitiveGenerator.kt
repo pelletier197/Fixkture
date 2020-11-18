@@ -1,6 +1,7 @@
 package io.github.pelletier197.fixkture.domain.generator
 
-import io.github.pelletier197.fixkture.domain.ClassInstantiationStatementBuilderContext
+import com.intellij.psi.util.PsiUtil
+import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 import kotlin.random.Random
 
@@ -36,8 +37,8 @@ object PrimitiveGenerator {
         return RegularCallbackClassInstantiationField { "'${charPool[Random.nextInt(0, charPool.size)]}'" }
     }
 
-    fun generateString(context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(context.targetClass.name!!)}\"" }
+    fun generateString(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder {
+        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(PsiUtil.getName(context.targetElement))}\"" }
     }
 
     fun generateUUID(): InstantiationFieldBuilder {

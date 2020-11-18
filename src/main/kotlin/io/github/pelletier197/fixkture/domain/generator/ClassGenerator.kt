@@ -1,12 +1,11 @@
 package io.github.pelletier197.fixkture.domain.generator
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.ClassInstantiationStatementBuilderContext
-import io.github.pelletier197.fixkture.domain.FieldConstructionContext
-import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.createInstantiationField
+import io.github.pelletier197.fixkture.domain.*
 
 class NullInstantiationField : CallbackClassInstantiationFieldBuilder(
         LanguageCallbackValueGenerator(
@@ -42,6 +41,18 @@ class ClassParameterInstantiationField(
     }
 }
 
+data class ClassInstantiationContext(
+        val targetClass: PsiClass,
+        val constructorSelector: (PsiClass) -> PsiMethod?,
+) {
+    fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
+        return PsiElementInstantiationStatementBuilderContext(
+                targetElement = element,
+                constructorSelector = this.constructorSelector
+        )
+    }
+}
+
 class ClassInstantiationField(
         val targetClass: PsiClass,
         val argumentsFields: List<InstantiationFieldBuilder>
@@ -63,7 +74,7 @@ private fun generateKotlinClass(targetClass: PsiClass, arguments: List<Instantia
 }
 
 object ClassGenerator {
-    fun generateClass(context: ClassInstantiationStatementBuilderContext): InstantiationFieldBuilder {
+    fun generateClass(context: ClassInstantiationContext): InstantiationFieldBuilder {
         val targetClass = context.targetClass
         val targetConstructor = context.constructorSelector(targetClass) ?: return NullInstantiationField()
 
@@ -79,13 +90,12 @@ object ClassGenerator {
     }
 
     private fun convertClassArgumentToInstantiationField(psiParameter: PsiParameter,
-                                                         context: ClassInstantiationStatementBuilderContext
+                                                         context: ClassInstantiationContext
     ): InstantiationFieldBuilder {
         // TODO - this should support for list creation, array creation, etc.. not use PSiUtil.resolveClassInType
-        val instantiationField = when (val psiClass = PsiUtil.resolveClassInType(psiParameter.type)) {
-            null -> NullInstantiationField()
-            else -> createInstantiationField(context.copy(targetClass = psiClass))
-        }
+        val instantiationField = createInstantiationFieldIfPossible(
+                context = context.asClassInstantiationStatementBuilderContext(psiParameter)
+        ) ?: NullInstantiationField()
 
         return ClassParameterInstantiationField(
                 parameter = psiParameter,
