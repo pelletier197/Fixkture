@@ -1,4 +1,4 @@
-package io.github.pelletier197.fixkture.api.java
+package io.github.pelletier197.fixkture.api.generators
 
 import com.intellij.codeInsight.generation.ClassMember
 import com.intellij.codeInsight.generation.PsiMethodMember
