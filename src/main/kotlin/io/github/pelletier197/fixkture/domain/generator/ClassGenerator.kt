@@ -36,7 +36,8 @@ class ClassParameterInstantiationField(
 
     private fun modifyContext(context: FieldConstructionContext): FieldConstructionContext {
         return context.copy(
-                fieldName = parameter.name
+                fieldName = parameter.name,
+                targetElement = parameter,
         )
     }
 }
@@ -92,14 +93,11 @@ object ClassGenerator {
     private fun convertClassArgumentToInstantiationField(psiParameter: PsiParameter,
                                                          context: ClassInstantiationContext
     ): InstantiationFieldBuilder {
-        // TODO - this should support for list creation, array creation, etc.. not use PSiUtil.resolveClassInType
-        val instantiationField = createInstantiationFieldIfPossible(
-                context = context.asClassInstantiationStatementBuilderContext(psiParameter)
-        ) ?: NullInstantiationField()
-
         return ClassParameterInstantiationField(
                 parameter = psiParameter,
-                instantiationField = instantiationField
+                instantiationField = createInstantiationFieldIfPossible(
+                        context = context.asClassInstantiationStatementBuilderContext(psiParameter)
+                ) ?: NullInstantiationField()
         )
     }
 }

@@ -1,6 +1,7 @@
-package io.github.pelletier197.fixkture.domain.generator
+package io.github.pelletier197.fixkture.domain.generator.java
 
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.generator.RegularCallbackClassInstantiationField
 import java.time.*
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random

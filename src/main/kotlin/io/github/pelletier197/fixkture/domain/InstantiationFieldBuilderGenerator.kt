@@ -1,15 +1,20 @@
 package io.github.pelletier197.fixkture.domain
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
+import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.generator.ClassGenerator
-import io.github.pelletier197.fixkture.domain.generator.JavaTimeGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaCollectionGenerator
 import java.lang.UnsupportedOperationException
 
 data class FieldConstructionContext(
-        val fieldName: String
+        val fieldName: String,
+        val targetElement: PsiElement,
 )
 
 interface InstantiationFieldBuilder {
@@ -27,6 +32,7 @@ fun createInstantiationField(context: PsiElementInstantiationStatementBuilderCon
 fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
     return when (val element = context.targetElement) {
         is PsiClass -> when (element.qualifiedName) {
+            // Primitives
             "Boolean", "java.lang.Boolean" -> PrimitiveGenerator.generateBoolean()
             "Integer", "java.lang.Integer" -> PrimitiveGenerator.generateInteger()
             "Long", "java.lang.Long" -> PrimitiveGenerator.generateLong()
@@ -35,14 +41,21 @@ fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatement
             "Byte", "java.lang.Byte" -> PrimitiveGenerator.generateByte()
             "Char", "java.lang.Character" -> PrimitiveGenerator.generateChar()
             "String", "java.lang.String" -> PrimitiveGenerator.generateString(context)
-            "UUID", "java.util.UUID" -> PrimitiveGenerator.generateUUID()
             "Instant", "java.time.Instant" -> JavaTimeGenerator.generateInstant()
+            // Time
             "ZonedDateTime", "java.time.ZonedDateTime" -> JavaTimeGenerator.generateZoneDateTime()
             "ZoneId", "java.time.ZoneId" -> JavaTimeGenerator.generateZoneId()
             "LocalDate", "java.time.LocalDate" -> JavaTimeGenerator.generateLocalDate()
             "LocalDateTime", "java.time.LocalDateTime" -> JavaTimeGenerator.generateLocalDateTime()
             "LocalTime", "java.time.LocalTime" -> JavaTimeGenerator.generateLocalTime()
             "Period", "java.time.Period" -> JavaTimeGenerator.generatePeriod()
+            // Library
+            "UUID", "java.util.UUID" -> JavaLibraryGenerator.generateUUID()
+            "BigDecimal", "java.math.BigDecimal" -> JavaLibraryGenerator.generateBigDecimal()
+            "BigInteger", "java.math.BigInteger" -> JavaLibraryGenerator.generateBigInteger()
+            // Collection
+            "List", "java.util.List" -> JavaCollectionGenerator.generateList()
+            "Iterable", "java.util.Iterable" -> JavaCollectionGenerator.generateIterable()
             else -> ClassGenerator.generateClass(context.asClassInstantiationContext())
         }
         is PsiParameter -> handlePsiParameter(element, context)
@@ -53,5 +66,18 @@ fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatement
 private fun handlePsiParameter(parameter: PsiParameter, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
     val classType = PsiUtil.resolveClassInType(parameter.type)
     if (classType != null) return createInstantiationFieldIfPossible(context.copy(targetElement = classType))
-    return null
+
+    return when (val type = parameter.type) {
+        is PsiPrimitiveType -> when (type.name) {
+            "int" -> PrimitiveGenerator.generateInteger()
+            "float" -> PrimitiveGenerator.generateFloat()
+            "double" -> PrimitiveGenerator.generateDouble()
+            "long" -> PrimitiveGenerator.generateLong()
+            "char" -> PrimitiveGenerator.generateChar()
+            "short" -> PrimitiveGenerator.generateByte()
+            "boolean" -> PrimitiveGenerator.generateBoolean()
+            else -> null
+        }
+        else -> null
+    }
 }

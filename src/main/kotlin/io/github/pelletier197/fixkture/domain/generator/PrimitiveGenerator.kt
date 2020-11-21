@@ -3,6 +3,9 @@ package io.github.pelletier197.fixkture.domain.generator
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import java.math.BigDecimal
+import java.math.BigInteger
+import kotlin.math.truncate
 import kotlin.random.Random
 
 object PrimitiveGenerator {
@@ -41,13 +44,10 @@ object PrimitiveGenerator {
         return RegularCallbackClassInstantiationField { "\"${toSnakeCase(PsiUtil.getName(context.targetElement))}\"" }
     }
 
-    fun generateUUID(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField { "java.util.UUID.randomUUID()" }
-    }
-
     private fun toSnakeCase(value: String): String {
         return camelRegex.replace(value) {
             "_${it.value}"
         }.toLowerCase()
     }
 }
+

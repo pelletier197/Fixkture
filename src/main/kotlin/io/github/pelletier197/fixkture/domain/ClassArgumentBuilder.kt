@@ -24,7 +24,8 @@ class InstantiationStatementGenerator(private val targetElement: PsiElement,
 
     private fun getFieldConstructionContext(): FieldConstructionContext {
         return FieldConstructionContext(
-                fieldName = generateFieldName()
+                fieldName = generateFieldName(),
+                targetElement = targetElement,
         )
     }
 }
