@@ -1,6 +1,7 @@
 package io.github.pelletier197.fixkture.domain
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
 import io.github.pelletier197.fixkture.domain.generator.ClassInstantiationContext
 
@@ -22,11 +23,11 @@ data class PsiElementInstantiationStatementBuilderContext(
 class RecursiveClassInstantiationStatementGeneratorFactory(
         private val constructorSelector: ConstructorSelectionFunction
 ) {
-    fun createInstantiationStatement(targetClass: PsiClass): InstantiationStatementGenerator {
+    fun createInstantiationStatement(targetElement: PsiElement): InstantiationStatementGenerator {
         return generateInstantiationStatement(
-                psiClass = targetClass,
+                element = targetElement,
                 context = PsiElementInstantiationStatementBuilderContext(
-                        targetElement = TargetElement.of(targetClass),
+                        targetElement = TargetElement.of(targetElement),
                         constructorSelector = constructorSelector
                 )
         )

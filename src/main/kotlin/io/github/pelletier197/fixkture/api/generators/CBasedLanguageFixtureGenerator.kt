@@ -11,7 +11,7 @@ abstract class CBasedLanguageFixtureGenerator : FixtureGenerator {
         val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory(
                 constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
         ).createInstantiationStatement(
-                targetClass = targetClass
+                targetElement = targetClass
         )
 
         generateFixture(
