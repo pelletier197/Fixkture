@@ -51,8 +51,8 @@ object JavaCollectionGenerator {
         val listBuilder = generateList()
         return CallbackClassInstantiationFieldBuilder(
                 LanguageCallbackValueGenerator(
-                        java = { context -> "new ArrayList<>()" },
-                        kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
+                        java = { context -> "new ArrayList<${getDiamondTypeString(context)}>(${listBuilder.asJavaFlatValue(context)})" },
+                        kotlin = { context -> "ArrayList(${listBuilder.asJavaFlatValue(context)})" }
                 )
         )
     }
@@ -72,10 +72,11 @@ object JavaCollectionGenerator {
         )
     }
 
-    private fun getDiamondTypeString(context: FieldConstructionContext) : String {
+    private fun getDiamondTypeString(context: FieldConstructionContext): String {
         val elementType = getListElementType(context) ?: return "?"
-
+        return ""
     }
+
     private fun getListElementType(context: FieldConstructionContext): PsiType? {
         return when (val element = context.targetElement.element) {
             is PsiParameter -> extractListElementTypeFromType(element.type)

@@ -71,6 +71,7 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "BigInteger", "java.math.BigInteger" -> JavaLibraryGenerator.generateBigInteger()
         // Collection
         "List", "java.util.List" -> JavaCollectionGenerator.generateList()
+        "ArrayList", "java.util.ArrayList" -> JavaCollectionGenerator.generateArrayList()
         "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
         else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
     }
