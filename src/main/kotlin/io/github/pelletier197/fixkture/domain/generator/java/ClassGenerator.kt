@@ -6,6 +6,7 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
+import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
 
 class NullInstantiationField : CallbackClassInstantiationFieldBuilder(
         LanguageCallbackValueGenerator(
@@ -70,8 +71,18 @@ private fun generateJavaClass(targetClass: PsiClass, arguments: List<Instantiati
 }
 
 private fun generateKotlinClass(targetClass: PsiClass, arguments: List<InstantiationFieldBuilder>, context: FieldConstructionContext): String {
-    val parameters = arguments.joinToString(separator = ", ") { it.asKotlinConstructorArgument(context) }
+    val parameters = getKotlinParametersString(targetClass, arguments, context)
     return "${targetClass.qualifiedName}($parameters)"
+}
+
+private fun getKotlinParametersString(targetClass: PsiClass, arguments: List<InstantiationFieldBuilder>, context: FieldConstructionContext): String {
+    // The target class is also a kotlin class
+    if (targetClass is KtUltraLightClass) {
+        return arguments.joinToString(separator = ", ") { it.asKotlinConstructorArgument(context) }
+    }
+
+    // The target class is a Java class
+    return arguments.joinToString(separator = ", ") { it.asKotlinFlatValue(context) }
 }
 
 object ClassGenerator {
