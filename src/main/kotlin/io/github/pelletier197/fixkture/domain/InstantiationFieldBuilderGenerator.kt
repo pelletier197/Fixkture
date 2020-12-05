@@ -6,16 +6,24 @@ import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.generator.ClassGenerator
+import io.github.pelletier197.fixkture.domain.generator.NullInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaCollectionGenerator
-import java.lang.UnsupportedOperationException
 
 data class FieldConstructionContext(
         val fieldName: String,
         val targetElement: PsiElement,
-)
+        val constructorSelector: ConstructorSelectionFunction
+) {
+    fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
+        return PsiElementInstantiationStatementBuilderContext(
+                targetElement = element,
+                constructorSelector = this.constructorSelector
+        )
+    }
+}
 
 interface InstantiationFieldBuilder {
     fun asJavaConstructorArgument(context: FieldConstructionContext): String
@@ -25,8 +33,7 @@ interface InstantiationFieldBuilder {
 }
 
 fun createInstantiationField(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder {
-    return createInstantiationFieldIfPossible(context = context)
-            ?: throw UnsupportedOperationException("Generating a fixture for element of type ${context.targetElement} is not supported")
+    return createInstantiationFieldIfPossible(context = context) ?: NullInstantiationField()
 }
 
 fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {

@@ -44,7 +44,7 @@ class ClassParameterInstantiationField(
 
 data class ClassInstantiationContext(
         val targetClass: PsiClass,
-        val constructorSelector: (PsiClass) -> PsiMethod?,
+        val constructorSelector: ConstructorSelectionFunction,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
@@ -95,9 +95,9 @@ object ClassGenerator {
     ): InstantiationFieldBuilder {
         return ClassParameterInstantiationField(
                 parameter = psiParameter,
-                instantiationField = createInstantiationFieldIfPossible(
+                instantiationField = createInstantiationField(
                         context = context.asClassInstantiationStatementBuilderContext(psiParameter)
-                ) ?: NullInstantiationField()
+                )
         )
     }
 }

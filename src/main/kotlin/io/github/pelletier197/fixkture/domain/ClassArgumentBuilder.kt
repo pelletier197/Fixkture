@@ -4,8 +4,8 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiUtil
 
-class InstantiationStatementGenerator(private val targetElement: PsiElement,
-                                      private val fieldBuilder: InstantiationFieldBuilder) {
+class InstantiationStatementGenerator(private val fieldBuilder: InstantiationFieldBuilder,
+                                      private val context: PsiElementInstantiationStatementBuilderContext) {
     fun createKotlinStatement(): String {
         val context = getFieldConstructionContext()
         val element = targetElement as PsiClass
@@ -22,10 +22,13 @@ class InstantiationStatementGenerator(private val targetElement: PsiElement,
         return PsiUtil.getName(targetElement)?.decapitalize() ?: "fixture"
     }
 
+    private val targetElement: PsiElement = context.targetElement
+
     private fun getFieldConstructionContext(): FieldConstructionContext {
         return FieldConstructionContext(
                 fieldName = generateFieldName(),
                 targetElement = targetElement,
+                constructorSelector = context.constructorSelector,
         )
     }
 }
@@ -34,7 +37,7 @@ class InstantiationStatementGenerator(private val targetElement: PsiElement,
 fun generateInstantiationStatement(context: PsiElementInstantiationStatementBuilderContext): InstantiationStatementGenerator {
     val fieldBuilder = createInstantiationField(context)
     return InstantiationStatementGenerator(
-            targetElement = context.targetElement,
-            fieldBuilder = fieldBuilder
+            fieldBuilder = fieldBuilder,
+            context = context
     )
 }

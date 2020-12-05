@@ -1,10 +1,8 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiParameter
-import io.github.pelletier197.fixkture.domain.FieldConstructionContext
-import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import com.intellij.psi.*
+import com.intellij.psi.util.PsiUtil
+import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
 import io.github.pelletier197.fixkture.domain.generator.NullInstantiationField
@@ -32,12 +30,11 @@ private data class CollectionElementInstantiationFieldBuilder(
 }
 
 object JavaCollectionGenerator {
-
     fun generateList(): InstantiationFieldBuilder {
         return CallbackClassInstantiationFieldBuilder(
                 LanguageCallbackValueGenerator(
-                        java = { context -> "java.util.List.of(${createCollectionArgument(listClass = context.targetElement).asJavaFlatValue(context)})" },
-                        kotlin = { context -> "listOf(${createCollectionArgument(listClass = context.targetElement).asKotlinFlatValue(context)})" }
+                        java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
+                        kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
                 )
         )
     }
@@ -46,12 +43,34 @@ object JavaCollectionGenerator {
         return generateList()
     }
 
-    private fun createCollectionArgument(listClass: PsiElement): InstantiationFieldBuilder {
-        if(listClass is PsiParameter) {
-            val type = listClass.type.
-            val str = type.toString()
-            println(type)
+    private fun createCollectionArgument(context: FieldConstructionContext): InstantiationFieldBuilder {
+        val element = context.targetElement
+        if (element is PsiParameter) {
+            val targetClass = extractListElementClass(element) ?: return NullInstantiationField()
+
+            return CollectionElementInstantiationFieldBuilder(
+                    elementBuilder = createInstantiationField(
+                            context = context.asClassInstantiationStatementBuilderContext(targetClass)
+                    ),
+                    elementClass = targetClass
+            )
+
         }
         return NullInstantiationField()
+    }
+
+    private fun extractListElementClass(element: PsiParameter): PsiClass? {
+        val parameterType = extractListElementType(element)
+        return PsiUtil.resolveClassInType(parameterType)
+    }
+
+    private fun extractListElementType(element: PsiParameter): PsiType? {
+        val parameterType = PsiUtil.extractIterableTypeParameter(element.type, false)
+
+        if (parameterType is PsiWildcardType) {
+            return parameterType.bound
+        }
+
+        return parameterType
     }
 }

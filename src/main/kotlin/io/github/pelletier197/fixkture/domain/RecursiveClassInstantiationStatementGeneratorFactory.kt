@@ -5,9 +5,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
 import io.github.pelletier197.fixkture.domain.generator.ClassInstantiationContext
 
+typealias ConstructorSelectionFunction = (PsiClass) -> PsiMethod?
+
 data class PsiElementInstantiationStatementBuilderContext(
         val targetElement: PsiElement,
-        val constructorSelector: (PsiClass) -> PsiMethod?,
+        val constructorSelector: ConstructorSelectionFunction,
 ) {
     fun asClassInstantiationContext(): ClassInstantiationContext {
         return ClassInstantiationContext(
