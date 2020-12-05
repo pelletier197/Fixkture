@@ -54,7 +54,7 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "Double", "java.lang.Double" -> PrimitiveGenerator.generateDouble()
         "Byte", "java.lang.Byte" -> PrimitiveGenerator.generateByte()
         "Char", "java.lang.Character" -> PrimitiveGenerator.generateChar()
-        "String", "java.lang.String" -> PrimitiveGenerator.generateString(context)
+        "String", "java.lang.String" -> PrimitiveGenerator.generateString()
         "Instant", "java.time.Instant" -> JavaTimeGenerator.generateInstant()
         // Time
         "ZonedDateTime", "java.time.ZonedDateTime" -> JavaTimeGenerator.generateZoneDateTime()

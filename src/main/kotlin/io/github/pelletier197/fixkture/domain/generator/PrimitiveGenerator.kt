@@ -40,8 +40,8 @@ object PrimitiveGenerator {
         return RegularCallbackClassInstantiationField { "'${charPool[Random.nextInt(0, charPool.size)]}'" }
     }
 
-    fun generateString(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(context.targetElement.name)}\"" }
+    fun generateString(): InstantiationFieldBuilder {
+        return RegularCallbackClassInstantiationField { context -> "\"${toSnakeCase(context.fieldName)}\"" }
     }
 
     private fun toSnakeCase(value: String): String {
