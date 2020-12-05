@@ -1,6 +1,5 @@
 package io.github.pelletier197.fixkture.api.generators
 
-import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.InstantiationStatementGenerator
 import io.github.pelletier197.fixkture.domain.RecursiveClassInstantiationStatementGeneratorFactory
 
@@ -9,11 +8,10 @@ abstract class CBasedLanguageFixtureGenerator : FixtureGenerator {
         val project = context.project
         val targetClass = selectTargetTargetClass(project) ?: return
 
-        val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory().createInstantiationStatement(
-                context = PsiElementInstantiationStatementBuilderContext(
-                        targetElement = targetClass,
-                        constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
-                )
+        val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory(
+                constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
+        ).createInstantiationStatement(
+                targetClass = targetClass
         )
 
         generateFixture(

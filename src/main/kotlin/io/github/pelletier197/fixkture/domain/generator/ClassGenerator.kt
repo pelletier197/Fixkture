@@ -37,7 +37,7 @@ class ClassParameterInstantiationField(
     private fun modifyContext(context: FieldConstructionContext): FieldConstructionContext {
         return context.copy(
                 fieldName = parameter.name,
-                targetElement = parameter,
+                targetElement = TargetElement.of(parameter),
         )
     }
 }
@@ -48,7 +48,7 @@ data class ClassInstantiationContext(
 ) {
     fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
-                targetElement = element,
+                targetElement = TargetElement.of(element),
                 constructorSelector = this.constructorSelector
         )
     }

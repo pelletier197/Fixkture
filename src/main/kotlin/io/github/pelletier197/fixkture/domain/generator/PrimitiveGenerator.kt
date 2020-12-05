@@ -41,7 +41,7 @@ object PrimitiveGenerator {
     }
 
     fun generateString(context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(PsiUtil.getName(context.targetElement))}\"" }
+        return RegularCallbackClassInstantiationField { "\"${toSnakeCase(context.targetElement.name)}\"" }
     }
 
     private fun toSnakeCase(value: String): String {

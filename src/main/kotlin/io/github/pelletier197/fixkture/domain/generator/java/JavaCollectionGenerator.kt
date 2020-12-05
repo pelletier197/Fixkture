@@ -9,22 +9,22 @@ import io.github.pelletier197.fixkture.domain.generator.NullInstantiationField
 
 private data class CollectionElementInstantiationFieldBuilder(
         private val elementBuilder: InstantiationFieldBuilder,
-        private val elementClass: PsiClass,
+        private val targetElement: TargetElement,
 ) : InstantiationFieldBuilder {
     override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
-        return elementBuilder.asJavaConstructorArgument(context.copy(targetElement = elementClass))
+        return elementBuilder.asJavaConstructorArgument(context.copy(targetElement = targetElement))
     }
 
     override fun asKotlinConstructorArgument(context: FieldConstructionContext): String {
-        return elementBuilder.asKotlinConstructorArgument(context.copy(targetElement = elementClass))
+        return elementBuilder.asKotlinConstructorArgument(context.copy(targetElement = targetElement))
     }
 
     override fun asJavaFlatValue(context: FieldConstructionContext): String {
-        return elementBuilder.asJavaFlatValue(context.copy(targetElement = elementClass))
+        return elementBuilder.asJavaFlatValue(context.copy(targetElement = targetElement))
     }
 
     override fun asKotlinFlatValue(context: FieldConstructionContext): String {
-        return elementBuilder.asKotlinFlatValue(context.copy(targetElement = elementClass))
+        return elementBuilder.asKotlinFlatValue(context.copy(targetElement = targetElement))
     }
 
 }
@@ -44,15 +44,15 @@ object JavaCollectionGenerator {
     }
 
     private fun createCollectionArgument(context: FieldConstructionContext): InstantiationFieldBuilder {
-        val element = context.targetElement
+        val element = context.targetElement.element
         if (element is PsiParameter) {
             val targetClass = extractListElementClass(element) ?: return NullInstantiationField()
 
             return CollectionElementInstantiationFieldBuilder(
                     elementBuilder = createInstantiationField(
-                            context = context.asClassInstantiationStatementBuilderContext(targetClass)
+                            context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetClass))
                     ),
-                    elementClass = targetClass
+                    targetElement = TargetElement.of(targetClass)
             )
 
         }
