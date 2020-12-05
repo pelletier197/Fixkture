@@ -1,12 +1,12 @@
 package io.github.pelletier197.fixkture.domain
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
+import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.generator.ClassGenerator
-import io.github.pelletier197.fixkture.domain.generator.NullInstantiationField
+import io.github.pelletier197.fixkture.domain.generator.java.ClassGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.NullInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
@@ -40,9 +40,11 @@ fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatement
     return when (val element = context.targetElement.element) {
         is PsiClass -> handlePsiClass(element, context)
         is PsiParameter -> handlePsiParameter(element, context)
+        is PsiType -> handlePsiType(element, context)
         else -> null
     }
 }
+
 
 private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
     return when (element.qualifiedName) {
@@ -69,8 +71,15 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "BigInteger", "java.math.BigInteger" -> JavaLibraryGenerator.generateBigInteger()
         // Collection
         "List", "java.util.List" -> JavaCollectionGenerator.generateList()
-        "Iterable", "java.util.Iterable" -> JavaCollectionGenerator.generateIterable()
-        else -> ClassGenerator.generateClass(context.asClassInstantiationContext())
+        "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
+        else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
+    }
+}
+
+fun handlePsiType(type: PsiType, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
+    return when (val targetClass = PsiUtil.resolveClassInType(type)) {
+        null -> null
+        else -> handlePsiClass(targetClass, context)
     }
 }
 

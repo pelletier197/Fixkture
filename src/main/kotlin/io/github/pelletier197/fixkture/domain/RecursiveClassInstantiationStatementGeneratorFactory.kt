@@ -3,7 +3,7 @@ package io.github.pelletier197.fixkture.domain
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
-import io.github.pelletier197.fixkture.domain.generator.ClassInstantiationContext
+import io.github.pelletier197.fixkture.domain.generator.java.ClassInstantiationContext
 
 typealias ConstructorSelectionFunction = (PsiClass) -> PsiMethod?
 
@@ -11,9 +11,9 @@ data class PsiElementInstantiationStatementBuilderContext(
         val targetElement: TargetElement,
         val constructorSelector: ConstructorSelectionFunction,
 ) {
-    fun asClassInstantiationContext(): ClassInstantiationContext {
+    fun asClassInstantiationContext(targetClass: PsiClass): ClassInstantiationContext {
         return ClassInstantiationContext(
-                targetClass = targetElement.element as PsiClass,
+                targetClass = targetClass,
                 constructorSelector = constructorSelector
         )
     }

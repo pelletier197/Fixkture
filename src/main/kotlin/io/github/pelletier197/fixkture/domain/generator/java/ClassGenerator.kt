@@ -1,11 +1,11 @@
-package io.github.pelletier197.fixkture.domain.generator
+package io.github.pelletier197.fixkture.domain.generator.java
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
-import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
+import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
 import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
 
 class NullInstantiationField : CallbackClassInstantiationFieldBuilder(
