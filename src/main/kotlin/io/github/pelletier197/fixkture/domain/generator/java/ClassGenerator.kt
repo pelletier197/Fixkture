@@ -6,7 +6,6 @@ import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
 import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
 
 open class ClassParameterInstantiationField(
@@ -61,10 +60,8 @@ class ClassInstantiationField(
         val targetClass: PsiClass,
         val argumentsFields: List<InstantiationFieldBuilder>
 ) : LanguageCallbackInstantiationFieldBuilder(
-        LanguageCallbackValueGenerator(
-                java = { generateJavaClass(targetClass = targetClass, arguments = argumentsFields, context = it) },
-                kotlin = { generateKotlinClass(targetClass = targetClass, arguments = argumentsFields, context = it) }
-        )
+        java = { generateJavaClass(targetClass = targetClass, arguments = argumentsFields, context = it) },
+        kotlin = { generateKotlinClass(targetClass = targetClass, arguments = argumentsFields, context = it) }
 )
 
 private fun generateJavaClass(targetClass: PsiClass, arguments: List<InstantiationFieldBuilder>, context: FieldConstructionContext): String {

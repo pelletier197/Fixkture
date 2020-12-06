@@ -96,7 +96,6 @@ fun handlePsiType(type: PsiType, context: PsiElementInstantiationStatementBuilde
                 "byte" -> PrimitiveGenerator.generateByte()
                 else -> null
             }
-            is PsiArrayType -> JavaArrayGenerator.generateArray()
             else -> null
         }
         else -> handlePsiClass(targetClass, context)
