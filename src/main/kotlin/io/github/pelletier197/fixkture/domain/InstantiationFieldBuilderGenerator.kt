@@ -83,22 +83,23 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
 }
 
 fun handlePsiType(type: PsiType, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
-    return when (val targetClass = PsiUtil.resolveClassInType(type)) {
-        null -> when (type) {
-            is PsiPrimitiveType -> when (type.name) {
-                "int" -> PrimitiveGenerator.generateInteger()
-                "float" -> PrimitiveGenerator.generateFloat()
-                "double" -> PrimitiveGenerator.generateDouble()
-                "long" -> PrimitiveGenerator.generateLong()
-                "char" -> PrimitiveGenerator.generateChar()
-                "short" -> PrimitiveGenerator.generateByte()
-                "boolean" -> PrimitiveGenerator.generateBoolean()
-                "byte" -> PrimitiveGenerator.generateByte()
-                else -> null
-            }
+    return when (type) {
+        is PsiPrimitiveType -> when (type.name) {
+            "int" -> PrimitiveGenerator.generateInteger()
+            "float" -> PrimitiveGenerator.generateFloat()
+            "double" -> PrimitiveGenerator.generateDouble()
+            "long" -> PrimitiveGenerator.generateLong()
+            "char" -> PrimitiveGenerator.generateChar()
+            "short" -> PrimitiveGenerator.generateByte()
+            "boolean" -> PrimitiveGenerator.generateBoolean()
+            "byte" -> PrimitiveGenerator.generateByte()
             else -> null
         }
-        else -> handlePsiClass(targetClass, context)
+        is PsiArrayType -> JavaArrayGenerator.generateArray()
+        else -> when (val targetClass = PsiUtil.resolveClassInType(type)) {
+            null -> null
+            else -> handlePsiClass(targetClass, context)
+        }
     }
 }
 

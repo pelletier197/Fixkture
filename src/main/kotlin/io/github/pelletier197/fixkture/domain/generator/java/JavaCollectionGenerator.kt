@@ -5,6 +5,7 @@ import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
 
 private data class CollectionElementInstantiationFieldBuilder(
         private val elementBuilder: InstantiationFieldBuilder,
@@ -119,22 +120,9 @@ object JavaCollectionGenerator {
         )
     }
 
-    private fun extractType(context: FieldConstructionContext): PsiType? {
-        return when (val element = context.targetElement.element) {
-            is PsiParameter -> element.type
-            is PsiType -> element
-            else -> null
-        }
-    }
-
     private fun getIterableElementType(context: FieldConstructionContext): PsiType? {
         return extractType(context)?.let { extractListElementTypeFromType(it) }
     }
-
-//    private fun extractListElementClass(element: PsiParameter): PsiClass? {
-//        val parameterType = extractListElementType(element)
-//        return PsiUtil.resolveClassInType(parameterType)
-//    }
 
     private fun extractListElementTypeFromType(element: PsiType): PsiType? {
         val parameterType = PsiUtil.extractIterableTypeParameter(element, false)
