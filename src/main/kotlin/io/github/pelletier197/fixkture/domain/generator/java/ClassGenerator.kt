@@ -5,18 +5,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
-import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
 import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
 
-class NullInstantiationField : CallbackClassInstantiationFieldBuilder(
-        LanguageCallbackValueGenerator(
-                java = { "null" },
-                kotlin = { "null" }
-        )
-)
-
-class ClassParameterInstantiationField(
+open class ClassParameterInstantiationField(
         private val parameter: PsiParameter,
         private val instantiationField: InstantiationFieldBuilder
 ) : InstantiationFieldBuilder {
@@ -44,6 +37,14 @@ class ClassParameterInstantiationField(
     }
 }
 
+class NullClassArgumentInstantiationField(
+        parameter: PsiParameter
+) : ClassParameterInstantiationField(
+        parameter = parameter,
+        instantiationField = NullInstantiationField()
+)
+
+
 data class ClassInstantiationContext(
         val targetClass: PsiClass,
         val constructorSelector: ConstructorSelectionFunction,
@@ -59,7 +60,7 @@ data class ClassInstantiationContext(
 class ClassInstantiationField(
         val targetClass: PsiClass,
         val argumentsFields: List<InstantiationFieldBuilder>
-) : CallbackClassInstantiationFieldBuilder(
+) : LanguageCallbackInstantiationFieldBuilder(
         LanguageCallbackValueGenerator(
                 java = { generateJavaClass(targetClass = targetClass, arguments = argumentsFields, context = it) },
                 kotlin = { generateKotlinClass(targetClass = targetClass, arguments = argumentsFields, context = it) }
@@ -105,7 +106,8 @@ object ClassGenerator {
     private fun convertClassArgumentToInstantiationField(psiParameter: PsiParameter,
                                                          context: ClassInstantiationContext
     ): InstantiationFieldBuilder {
-        if (isRecursive(psiParameter, context)) return NullInstantiationField()
+        if (isRecursive(psiParameter, context)) return NullClassArgumentInstantiationField(psiParameter)
+
         return ClassParameterInstantiationField(
                 parameter = psiParameter,
                 instantiationField = createInstantiationField(

@@ -1,16 +1,16 @@
 package io.github.pelletier197.fixkture.domain
 
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiParameter
-import com.intellij.psi.PsiPrimitiveType
-import com.intellij.psi.PsiType
+import com.intellij.psi.*
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.generator.java.ClassGenerator
-import io.github.pelletier197.fixkture.domain.generator.java.NullInstantiationField
-import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
-import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
+import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
-import io.github.pelletier197.fixkture.domain.generator.java.JavaCollectionGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.*
+
+class NullInstantiationField : LanguageCallbackInstantiationFieldBuilder(
+        java = { "null" },
+        kotlin = { "null" }
+)
+
 
 data class FieldConstructionContext(
         val fieldName: String,
@@ -84,26 +84,25 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
 
 fun handlePsiType(type: PsiType, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
     return when (val targetClass = PsiUtil.resolveClassInType(type)) {
-        null -> null
+        null -> when (type) {
+            is PsiPrimitiveType -> when (type.name) {
+                "int" -> PrimitiveGenerator.generateInteger()
+                "float" -> PrimitiveGenerator.generateFloat()
+                "double" -> PrimitiveGenerator.generateDouble()
+                "long" -> PrimitiveGenerator.generateLong()
+                "char" -> PrimitiveGenerator.generateChar()
+                "short" -> PrimitiveGenerator.generateByte()
+                "boolean" -> PrimitiveGenerator.generateBoolean()
+                "byte" -> PrimitiveGenerator.generateByte()
+                else -> null
+            }
+            is PsiArrayType -> JavaArrayGenerator.generateArray()
+            else -> null
+        }
         else -> handlePsiClass(targetClass, context)
     }
 }
 
 private fun handlePsiParameter(parameter: PsiParameter, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
-    val classType = PsiUtil.resolveClassInType(parameter.type)
-    if (classType != null) return createInstantiationFieldIfPossible(context.copy(targetElement = TargetElement.of(classType)))
-
-    return when (val type = parameter.type) {
-        is PsiPrimitiveType -> when (type.name) {
-            "int" -> PrimitiveGenerator.generateInteger()
-            "float" -> PrimitiveGenerator.generateFloat()
-            "double" -> PrimitiveGenerator.generateDouble()
-            "long" -> PrimitiveGenerator.generateLong()
-            "char" -> PrimitiveGenerator.generateChar()
-            "short" -> PrimitiveGenerator.generateByte()
-            "boolean" -> PrimitiveGenerator.generateBoolean()
-            else -> null
-        }
-        else -> null
-    }
+    return handlePsiType(parameter.type, context)
 }

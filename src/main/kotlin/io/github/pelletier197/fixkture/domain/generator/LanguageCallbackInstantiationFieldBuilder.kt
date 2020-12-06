@@ -6,42 +6,36 @@ import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 
 typealias ClassFieldGeneratorCallback = (FieldConstructionContext) -> String
 
-data class LanguageCallbackValueGenerator(
+
+open class LanguageCallbackInstantiationFieldBuilder(
         val java: ClassFieldGeneratorCallback,
         val kotlin: ClassFieldGeneratorCallback,
-)
-
-
-open class CallbackClassInstantiationFieldBuilder(
-        private val callbacks: LanguageCallbackValueGenerator
 ) : InstantiationFieldBuilder {
     override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
         // new Class(<target>)
-        return callbacks.java(context)
+        return java(context)
     }
 
     override fun asKotlinConstructorArgument(context: FieldConstructionContext): String {
         // Class(<constructorFieldName = target>)
-        return "${context.fieldName} = ${callbacks.kotlin(context)}"
+        return "${context.fieldName} = ${kotlin(context)}"
     }
 
     override fun asJavaFlatValue(context: FieldConstructionContext): String {
         // final Target variable = <Target>
-        return callbacks.java(context)
+        return java(context)
     }
 
     override fun asKotlinFlatValue(context: FieldConstructionContext): String {
         // val Target = <Target>
-        return callbacks.kotlin(context)
+        return kotlin(context)
     }
 }
 
-class RegularCallbackClassInstantiationField(
+class ConstantCallbackClassInstantiationField(
         callback: ClassFieldGeneratorCallback
-) : CallbackClassInstantiationFieldBuilder(
-        LanguageCallbackValueGenerator(
-                java = callback,
-                kotlin = callback
-        )
+) : LanguageCallbackInstantiationFieldBuilder(
+        java = callback,
+        kotlin = callback
 )
 

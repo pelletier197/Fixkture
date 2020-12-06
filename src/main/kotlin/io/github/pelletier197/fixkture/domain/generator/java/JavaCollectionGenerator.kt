@@ -4,8 +4,7 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
-import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
+import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 
 private data class CollectionElementInstantiationFieldBuilder(
         private val elementBuilder: InstantiationFieldBuilder,
@@ -31,60 +30,48 @@ private data class CollectionElementInstantiationFieldBuilder(
 
 object JavaCollectionGenerator {
     fun generateList(): InstantiationFieldBuilder {
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-                        kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
+                kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateSet(): InstantiationFieldBuilder {
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "java.util.Set.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-                        kotlin = { context -> "setOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "java.util.Set.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
+                kotlin = { context -> "setOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateHashset(): InstantiationFieldBuilder {
         val setBuilder = generateSet()
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
-                        kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
+                kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateTreeSet(): InstantiationFieldBuilder {
         val setBuilder = generateSet()
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
-                        kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
+                kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateArrayList(): InstantiationFieldBuilder {
         val listBuilder = generateList()
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
-                        kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
+                kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateLinkedList(): InstantiationFieldBuilder {
         val listBuilder = generateList()
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
-                        kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
+                kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
@@ -93,11 +80,9 @@ object JavaCollectionGenerator {
     }
 
     fun generateMap(): InstantiationFieldBuilder {
-        return CallbackClassInstantiationFieldBuilder(
-                LanguageCallbackValueGenerator(
-                        java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
-                        kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
-                )
+        return LanguageCallbackInstantiationFieldBuilder(
+                java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
+                kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
         )
     }
 

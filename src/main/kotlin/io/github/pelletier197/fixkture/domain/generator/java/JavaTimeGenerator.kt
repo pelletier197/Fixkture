@@ -1,53 +1,53 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.generator.RegularCallbackClassInstantiationField
+import io.github.pelletier197.fixkture.domain.generator.ConstantCallbackClassInstantiationField
 import java.time.*
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
 object JavaTimeGenerator {
     fun generateInstant(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             "java.time.Instant.parse(\"${generateRandomInstant()}\")"
         }
     }
 
     fun generateZoneDateTime(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             "java.time.ZonedDateTime.parse(\"${generateRandomInstant().atZone(generateRandomZoneId())}\")"
         }
     }
 
     fun generateZoneId(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             "java.time.ZoneId.of(\"${generateRandomZoneId().id}\")"
         }
     }
 
     fun generateLocalDate(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             val date = LocalDate.ofInstant(generateRandomInstant(), generateRandomZoneId())
             "java.time.LocalDate.parse(\"$date\")"
         }
     }
 
     fun generateLocalDateTime(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             val dateTime = LocalDateTime.ofInstant(generateRandomInstant(), generateRandomZoneId())
             "java.time.LocalDateTime.parse(\"$dateTime\")"
         }
     }
 
     fun generateLocalTime(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             val dateTime = LocalTime.ofInstant(generateRandomInstant(), generateRandomZoneId())
             "java.time.LocalTime.parse(\"$dateTime\")"
         }
     }
 
     fun generatePeriod(): InstantiationFieldBuilder {
-        return RegularCallbackClassInstantiationField {
+        return ConstantCallbackClassInstantiationField {
             val first = LocalDate.ofInstant(generateRandomInstant(), generateRandomZoneId())
             val second = LocalDate.ofInstant(generateRandomInstant(), generateRandomZoneId())
             val period = Period.between(minOf(first, second), maxOf(first, second))
