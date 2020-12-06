@@ -65,13 +65,17 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "LocalDateTime", "java.time.LocalDateTime" -> JavaTimeGenerator.generateLocalDateTime()
         "LocalTime", "java.time.LocalTime" -> JavaTimeGenerator.generateLocalTime()
         "Period", "java.time.Period" -> JavaTimeGenerator.generatePeriod()
-        // Library
+        // Other
         "UUID", "java.util.UUID" -> JavaLibraryGenerator.generateUUID()
         "BigDecimal", "java.math.BigDecimal" -> JavaLibraryGenerator.generateBigDecimal()
         "BigInteger", "java.math.BigInteger" -> JavaLibraryGenerator.generateBigInteger()
-        // Collection
+        // Collections
         "List", "java.util.List" -> JavaCollectionGenerator.generateList()
+        "Set", "java.util.Set" -> JavaCollectionGenerator.generateSet()
+        "HashSet", "java.util.HashSet" -> JavaCollectionGenerator.generateHashset()
+        "TreeSet", "java.util.TreeSet" -> JavaCollectionGenerator.generateTreeSet()
         "ArrayList", "java.util.ArrayList" -> JavaCollectionGenerator.generateArrayList()
+        "LinkedList", "java.util.LinkedList" -> JavaCollectionGenerator.generateLinkedList()
         "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
         else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
     }

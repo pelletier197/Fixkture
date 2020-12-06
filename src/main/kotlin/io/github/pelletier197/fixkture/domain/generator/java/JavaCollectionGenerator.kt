@@ -47,12 +47,42 @@ object JavaCollectionGenerator {
         )
     }
 
+    fun generateHashset(): InstantiationFieldBuilder {
+        val setBuilder = generateSet()
+        return CallbackClassInstantiationFieldBuilder(
+                LanguageCallbackValueGenerator(
+                        java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
+                        kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
+                )
+        )
+    }
+
+    fun generateTreeSet(): InstantiationFieldBuilder {
+        val setBuilder = generateSet()
+        return CallbackClassInstantiationFieldBuilder(
+                LanguageCallbackValueGenerator(
+                        java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
+                        kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
+                )
+        )
+    }
+
     fun generateArrayList(): InstantiationFieldBuilder {
         val listBuilder = generateList()
         return CallbackClassInstantiationFieldBuilder(
                 LanguageCallbackValueGenerator(
-                        java = { context -> "new ArrayList<${getDiamondTypeString(context)}>(${listBuilder.asJavaFlatValue(context)})" },
-                        kotlin = { context -> "ArrayList(${listBuilder.asJavaFlatValue(context)})" }
+                        java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
+                        kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
+                )
+        )
+    }
+
+    fun generateLinkedList(): InstantiationFieldBuilder {
+        val listBuilder = generateList()
+        return CallbackClassInstantiationFieldBuilder(
+                LanguageCallbackValueGenerator(
+                        java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
+                        kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
                 )
         )
     }
@@ -70,11 +100,6 @@ object JavaCollectionGenerator {
                 ),
                 targetElement = TargetElement.of(targetType)
         )
-    }
-
-    private fun getDiamondTypeString(context: FieldConstructionContext): String {
-        val elementType = getListElementType(context) ?: return "?"
-        return ""
     }
 
     private fun getListElementType(context: FieldConstructionContext): PsiType? {
