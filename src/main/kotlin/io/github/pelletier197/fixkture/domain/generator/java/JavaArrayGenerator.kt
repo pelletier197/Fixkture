@@ -2,7 +2,11 @@ package io.github.pelletier197.fixkture.domain.generator.java
 
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiPrimitiveType
-import io.github.pelletier197.fixkture.domain.*
+import io.github.pelletier197.fixkture.domain.FieldConstructionContext
+import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.NullInstantiationField
+import io.github.pelletier197.fixkture.domain.TargetElement
+import io.github.pelletier197.fixkture.domain.createInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.NestedElementInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
@@ -10,8 +14,8 @@ import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
 object JavaArrayGenerator {
     fun generateArray(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "new ${generateJavaArrayTypeString(context)}[] { ${generateArrayElement(context).asJavaFlatValue(context)} }" },
-                kotlin = { context -> "${selectKotlinArrayGeneratorFunction(context)}(${generateArrayElement(context).asKotlinFlatValue(context)})" }
+            java = { context -> "new ${generateJavaArrayTypeString(context)}[] { ${generateArrayElement(context).asJavaFlatValue(context)} }" },
+            kotlin = { context -> "${selectKotlinArrayGeneratorFunction(context)}(${generateArrayElement(context).asKotlinFlatValue(context)})" }
         )
     }
 
@@ -51,10 +55,10 @@ object JavaArrayGenerator {
         val type = extractType(context) ?: return NullInstantiationField()
         if (type !is PsiArrayType) return NullInstantiationField()
         return NestedElementInstantiationFieldBuilder(
-                elementBuilder = createInstantiationField(
-                        context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(type.componentType))
-                ),
-                targetElement = TargetElement.of(type.componentType)
+            elementBuilder = createInstantiationField(
+                context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(type.componentType))
+            ),
+            targetElement = TargetElement.of(type.componentType)
         )
     }
 }

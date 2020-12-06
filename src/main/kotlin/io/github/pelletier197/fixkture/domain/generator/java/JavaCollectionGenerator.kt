@@ -1,9 +1,14 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
-import com.intellij.psi.*
+import com.intellij.psi.PsiType
+import com.intellij.psi.PsiWildcardType
 import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.*
+import io.github.pelletier197.fixkture.domain.FieldConstructionContext
+import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.NullInstantiationField
+import io.github.pelletier197.fixkture.domain.TargetElement
+import io.github.pelletier197.fixkture.domain.createInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.NestedElementInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
@@ -11,47 +16,47 @@ import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
 object JavaCollectionGenerator {
     fun generateList(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-                kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
+            java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
+            kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateSet(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "java.util.Set.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-                kotlin = { context -> "setOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
+            java = { context -> "java.util.Set.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
+            kotlin = { context -> "setOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateHashset(): InstantiationFieldBuilder {
         val setBuilder = generateSet()
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
-                kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
+            java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateTreeSet(): InstantiationFieldBuilder {
         val setBuilder = generateSet()
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
-                kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
+            java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateArrayList(): InstantiationFieldBuilder {
         val listBuilder = generateList()
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
-                kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
+            java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
     fun generateLinkedList(): InstantiationFieldBuilder {
         val listBuilder = generateList()
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
-                kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
+            java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
@@ -61,8 +66,8 @@ object JavaCollectionGenerator {
 
     fun generateMap(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
-                java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
-                kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
+            java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
+            kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
         )
     }
 
@@ -92,10 +97,10 @@ object JavaCollectionGenerator {
 
     private fun createArgument(context: FieldConstructionContext, targetType: PsiType): InstantiationFieldBuilder {
         return NestedElementInstantiationFieldBuilder(
-                elementBuilder = createInstantiationField(
-                        context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetType))
-                ),
-                targetElement = TargetElement.of(targetType)
+            elementBuilder = createInstantiationField(
+                context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetType))
+            ),
+            targetElement = TargetElement.of(targetType)
         )
     }
 

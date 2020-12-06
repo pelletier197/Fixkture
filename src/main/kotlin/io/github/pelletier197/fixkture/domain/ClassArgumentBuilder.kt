@@ -5,9 +5,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiUtil
 
 class InstantiationStatementGenerator(
-        private val element: PsiElement,
-        private val fieldBuilder: InstantiationFieldBuilder,
-        private val context: PsiElementInstantiationStatementBuilderContext) {
+    private val element: PsiElement,
+    private val fieldBuilder: InstantiationFieldBuilder,
+    private val context: PsiElementInstantiationStatementBuilderContext
+) {
     fun createKotlinStatement(): String {
         val context = getFieldConstructionContext()
         val targetClass = element as PsiClass
@@ -26,19 +27,18 @@ class InstantiationStatementGenerator(
 
     private fun getFieldConstructionContext(): FieldConstructionContext {
         return FieldConstructionContext(
-                fieldName = generateFieldName(),
-                targetElement = TargetElement.of(element),
-                constructorSelector = context.constructorSelector,
+            fieldName = generateFieldName(),
+            targetElement = TargetElement.of(element),
+            constructorSelector = context.constructorSelector,
         )
     }
 }
 
-
 fun generateInstantiationStatement(element: PsiElement, context: PsiElementInstantiationStatementBuilderContext): InstantiationStatementGenerator {
     val fieldBuilder = createInstantiationField(context)
     return InstantiationStatementGenerator(
-            fieldBuilder = fieldBuilder,
-            context = context,
-            element = element
+        fieldBuilder = fieldBuilder,
+        context = context,
+        element = element
     )
 }

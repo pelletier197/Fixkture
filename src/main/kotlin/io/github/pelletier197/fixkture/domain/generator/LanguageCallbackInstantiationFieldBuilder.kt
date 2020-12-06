@@ -3,13 +3,11 @@ package io.github.pelletier197.fixkture.domain.generator
 import io.github.pelletier197.fixkture.domain.FieldConstructionContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 
-
 typealias ClassFieldGeneratorCallback = (FieldConstructionContext) -> String
 
-
 open class LanguageCallbackInstantiationFieldBuilder(
-        val java: ClassFieldGeneratorCallback,
-        val kotlin: ClassFieldGeneratorCallback,
+    val java: ClassFieldGeneratorCallback,
+    val kotlin: ClassFieldGeneratorCallback,
 ) : InstantiationFieldBuilder {
     override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
         // new Class(<target>)
@@ -33,9 +31,8 @@ open class LanguageCallbackInstantiationFieldBuilder(
 }
 
 class ConstantCallbackClassInstantiationField(
-        callback: ClassFieldGeneratorCallback
+    callback: ClassFieldGeneratorCallback
 ) : LanguageCallbackInstantiationFieldBuilder(
-        java = callback,
-        kotlin = callback
+    java = callback,
+    kotlin = callback
 )
-

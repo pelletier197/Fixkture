@@ -4,13 +4,19 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.*
+import io.github.pelletier197.fixkture.domain.ConstructorSelectionFunction
+import io.github.pelletier197.fixkture.domain.FieldConstructionContext
+import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.NullInstantiationField
+import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
+import io.github.pelletier197.fixkture.domain.TargetElement
+import io.github.pelletier197.fixkture.domain.createInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
 
 open class ClassParameterInstantiationField(
-        private val parameter: PsiParameter,
-        private val instantiationField: InstantiationFieldBuilder
+    private val parameter: PsiParameter,
+    private val instantiationField: InstantiationFieldBuilder
 ) : InstantiationFieldBuilder {
     override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
         return instantiationField.asJavaConstructorArgument(modifyContext(context))
@@ -30,38 +36,37 @@ open class ClassParameterInstantiationField(
 
     private fun modifyContext(context: FieldConstructionContext): FieldConstructionContext {
         return context.copy(
-                fieldName = parameter.name,
-                targetElement = TargetElement.of(parameter),
+            fieldName = parameter.name,
+            targetElement = TargetElement.of(parameter),
         )
     }
 }
 
 class NullClassArgumentInstantiationField(
-        parameter: PsiParameter
+    parameter: PsiParameter
 ) : ClassParameterInstantiationField(
-        parameter = parameter,
-        instantiationField = NullInstantiationField()
+    parameter = parameter,
+    instantiationField = NullInstantiationField()
 )
 
-
 data class ClassInstantiationContext(
-        val targetClass: PsiClass,
-        val constructorSelector: ConstructorSelectionFunction,
+    val targetClass: PsiClass,
+    val constructorSelector: ConstructorSelectionFunction,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
-                targetElement = TargetElement.of(element),
-                constructorSelector = this.constructorSelector
+            targetElement = TargetElement.of(element),
+            constructorSelector = this.constructorSelector
         )
     }
 }
 
 class ClassInstantiationField(
-        val targetClass: PsiClass,
-        val argumentsFields: List<InstantiationFieldBuilder>
+    val targetClass: PsiClass,
+    val argumentsFields: List<InstantiationFieldBuilder>
 ) : LanguageCallbackInstantiationFieldBuilder(
-        java = { generateJavaClass(targetClass = targetClass, arguments = argumentsFields, context = it) },
-        kotlin = { generateKotlinClass(targetClass = targetClass, arguments = argumentsFields, context = it) }
+    java = { generateJavaClass(targetClass = targetClass, arguments = argumentsFields, context = it) },
+    kotlin = { generateKotlinClass(targetClass = targetClass, arguments = argumentsFields, context = it) }
 )
 
 private fun generateJavaClass(targetClass: PsiClass, arguments: List<InstantiationFieldBuilder>, context: FieldConstructionContext): String {
@@ -95,21 +100,22 @@ object ClassGenerator {
         }
 
         return ClassInstantiationField(
-                targetClass = targetClass,
-                argumentsFields = instantiationFields
+            targetClass = targetClass,
+            argumentsFields = instantiationFields
         )
     }
 
-    private fun convertClassArgumentToInstantiationField(psiParameter: PsiParameter,
-                                                         context: ClassInstantiationContext
+    private fun convertClassArgumentToInstantiationField(
+        psiParameter: PsiParameter,
+        context: ClassInstantiationContext
     ): InstantiationFieldBuilder {
         if (isRecursive(psiParameter, context)) return NullClassArgumentInstantiationField(psiParameter)
 
         return ClassParameterInstantiationField(
-                parameter = psiParameter,
-                instantiationField = createInstantiationField(
-                        context = context.asClassInstantiationStatementBuilderContext(psiParameter)
-                )
+            parameter = psiParameter,
+            instantiationField = createInstantiationField(
+                context = context.asClassInstantiationStatementBuilderContext(psiParameter)
+            )
         )
     }
 

@@ -33,6 +33,10 @@ intellij {
     plugins = ['java', 'Kotlin']
 }
 
+publishPlugin {
+
+}
+
 patchPluginXml {
     changeNotes """
       Add change notes here.<br>

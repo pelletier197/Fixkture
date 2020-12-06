@@ -5,8 +5,8 @@ import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.TargetElement
 
 class NestedElementInstantiationFieldBuilder(
-        private val elementBuilder: InstantiationFieldBuilder,
-        private val targetElement: TargetElement,
+    private val elementBuilder: InstantiationFieldBuilder,
+    private val targetElement: TargetElement,
 ) : InstantiationFieldBuilder {
     override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
         return elementBuilder.asJavaConstructorArgument(context.copy(targetElement = targetElement))

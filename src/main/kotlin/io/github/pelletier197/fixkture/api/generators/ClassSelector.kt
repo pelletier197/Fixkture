@@ -25,13 +25,12 @@ fun selectTargetConstructor(psiClass: PsiClass, project: Project): PsiMethod? {
     return constructors.getOrNull(0)
 }
 
-
 fun selectConstructorInList(constructors: Array<PsiMethod>, project: Project): PsiMethod? {
     val constructorChooser = MemberChooserBuilder<ClassMember>(project)
-            .also { it.allowEmptySelection(false) }
-            .also { it.allowMultiSelection(false) }
-            .also { it.setTitle("Choose constructor") }
-            .createBuilder(constructors.map { PsiMethodMember(it) }.toTypedArray())
+        .also { it.allowEmptySelection(false) }
+        .also { it.allowMultiSelection(false) }
+        .also { it.setTitle("Choose constructor") }
+        .createBuilder(constructors.map { PsiMethodMember(it) }.toTypedArray())
     constructorChooser.show()
     return (constructorChooser.selectedElements?.getOrNull(0) as PsiMethodMember?)?.element
 }

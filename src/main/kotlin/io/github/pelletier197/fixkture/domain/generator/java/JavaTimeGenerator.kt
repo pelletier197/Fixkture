@@ -2,7 +2,12 @@ package io.github.pelletier197.fixkture.domain.generator.java
 
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.ConstantCallbackClassInstantiationField
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.Period
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
@@ -55,7 +60,6 @@ object JavaTimeGenerator {
         }
     }
 
-
     private fun generateRandomZoneId(): ZoneId {
         val available = ZoneId.getAvailableZoneIds()
         return if (available.isEmpty()) ZoneId.systemDefault() else ZoneId.of(available.random())
@@ -63,10 +67,10 @@ object JavaTimeGenerator {
 
     private fun generateRandomInstant(): Instant {
         return Instant.ofEpochMilli(
-                Random.nextLong(
-                        from = Instant.now().minus(365, ChronoUnit.DAYS).toEpochMilli(),
-                        until = Instant.now().toEpochMilli()
-                )
+            Random.nextLong(
+                from = Instant.now().minus(365, ChronoUnit.DAYS).toEpochMilli(),
+                until = Instant.now().toEpochMilli()
+            )
         )
     }
 }

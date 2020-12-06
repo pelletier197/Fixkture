@@ -6,9 +6,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 
 data class FixtureGenerationContext(
-        val project: Project,
-        val caret: Caret?,
-        val file: PsiFile,
+    val project: Project,
+    val caret: Caret?,
+    val file: PsiFile,
 ) {
     val currentElement: PsiElement? get() = caret?.let { file.findElementAt(it.caretModel.offset) }
     val parentElement: PsiElement? get() = this.currentElement?.parent

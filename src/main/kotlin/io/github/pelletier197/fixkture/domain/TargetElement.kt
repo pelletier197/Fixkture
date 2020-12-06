@@ -1,6 +1,5 @@
 package io.github.pelletier197.fixkture.domain
 
-import com.intellij.execution.compound.TypeNameTarget
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiUtil
@@ -21,7 +20,7 @@ interface TargetElement {
 }
 
 data class PsiElementTargetElement(
-        val psiElement: PsiElement
+    val psiElement: PsiElement
 ) : TargetElement {
     override val name: String
         get() = PsiUtil.getName(psiElement) ?: "fixture"
@@ -30,7 +29,7 @@ data class PsiElementTargetElement(
 }
 
 data class PsiTypeTargetElement(
-        val type: PsiType
+    val type: PsiType
 ) : TargetElement {
     override val name: String
         get() = PsiUtil.resolveClassInType(type)?.let { PsiUtil.getName(it) } ?: "fixture"

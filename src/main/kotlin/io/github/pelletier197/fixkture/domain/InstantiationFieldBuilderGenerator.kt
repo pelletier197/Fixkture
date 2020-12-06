@@ -1,26 +1,33 @@
 package io.github.pelletier197.fixkture.domain
 
-import com.intellij.psi.*
+import com.intellij.psi.PsiArrayType
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiParameter
+import com.intellij.psi.PsiPrimitiveType
+import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
-import io.github.pelletier197.fixkture.domain.generator.java.*
+import io.github.pelletier197.fixkture.domain.generator.java.ClassGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaArrayGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaCollectionGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
 
 class NullInstantiationField : LanguageCallbackInstantiationFieldBuilder(
-        java = { "null" },
-        kotlin = { "null" }
+    java = { "null" },
+    kotlin = { "null" }
 )
 
-
 data class FieldConstructionContext(
-        val fieldName: String,
-        val targetElement: TargetElement,
-        val constructorSelector: ConstructorSelectionFunction
+    val fieldName: String,
+    val targetElement: TargetElement,
+    val constructorSelector: ConstructorSelectionFunction
 ) {
     fun asClassInstantiationStatementBuilderContext(element: TargetElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
-                targetElement = element,
-                constructorSelector = this.constructorSelector
+            targetElement = element,
+            constructorSelector = this.constructorSelector
         )
     }
 }
@@ -44,7 +51,6 @@ fun createInstantiationFieldIfPossible(context: PsiElementInstantiationStatement
         else -> null
     }
 }
-
 
 private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationStatementBuilderContext): InstantiationFieldBuilder? {
     return when (element.qualifiedName) {

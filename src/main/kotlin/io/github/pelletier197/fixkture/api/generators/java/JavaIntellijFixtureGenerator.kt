@@ -8,7 +8,6 @@ import com.intellij.refactoring.extractMethod.newImpl.ExtractMethodHelper.addSib
 import io.github.pelletier197.fixkture.api.generators.CBasedLanguageFixtureGenerator
 import io.github.pelletier197.fixkture.api.generators.FixtureGenerationContext
 import io.github.pelletier197.fixkture.domain.InstantiationStatementGenerator
-import org.jetbrains.kotlin.psi.KtFile
 
 class JavaIntellijFixtureGenerator : CBasedLanguageFixtureGenerator() {
     override fun generateFixture(statementGenerator: InstantiationStatementGenerator, context: FixtureGenerationContext) {
