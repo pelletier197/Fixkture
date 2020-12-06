@@ -1,6 +1,7 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
 import com.intellij.psi.PsiArrayType
+import com.intellij.psi.PsiPrimitiveType
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.NestedElementInstantiationFieldBuilder
@@ -10,7 +11,7 @@ object JavaArrayGenerator {
     fun generateArray(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
                 java = { context -> "new ${generateJavaArrayTypeString(context)}[] { ${generateArrayElement(context).asJavaFlatValue(context)} }" },
-                kotlin = { context -> "arrayOf<${generateKotlinArrayTypeString(context)}>(${generateArrayElement(context).asKotlinFlatValue(context)})" }
+                kotlin = { context -> "${selectKotlinArrayGeneratorFunction(context)}(${generateArrayElement(context).asKotlinFlatValue(context)})" }
         )
     }
 
@@ -20,9 +21,23 @@ object JavaArrayGenerator {
         return type.componentType.canonicalText
     }
 
-    private fun generateKotlinArrayTypeString(context: FieldConstructionContext): String {
-        val javaString = generateJavaArrayTypeString(context)
-        return convertJavaArrayTypeStringToKotlin(javaString)
+    private fun selectKotlinArrayGeneratorFunction(context: FieldConstructionContext): String {
+        val type = extractType(context)
+        if (type !is PsiArrayType) return "Object"
+        return when (val componentType = type.componentType) {
+            is PsiPrimitiveType -> when (componentType.name) {
+                "int" -> "intArrayOf"
+                "float" -> "floatArrayOf"
+                "double" -> "doubleArrayOf"
+                "long" -> "longArrayOf"
+                "char" -> "charArrayOf"
+                "short" -> "shortArrayOf"
+                "boolean" -> "booleanArrayOf"
+                "byte" -> "byteArrayOf"
+                else -> "arrayOf"
+            }
+            else -> "arrayOf"
+        }
     }
 
     // Converts Object[] to Array<Object>
