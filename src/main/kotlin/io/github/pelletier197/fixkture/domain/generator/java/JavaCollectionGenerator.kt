@@ -5,29 +5,8 @@ import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.generator.NestedElementInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
-
-private data class CollectionElementInstantiationFieldBuilder(
-        private val elementBuilder: InstantiationFieldBuilder,
-        private val targetElement: TargetElement,
-) : InstantiationFieldBuilder {
-    override fun asJavaConstructorArgument(context: FieldConstructionContext): String {
-        return elementBuilder.asJavaConstructorArgument(context.copy(targetElement = targetElement))
-    }
-
-    override fun asKotlinConstructorArgument(context: FieldConstructionContext): String {
-        return elementBuilder.asKotlinConstructorArgument(context.copy(targetElement = targetElement))
-    }
-
-    override fun asJavaFlatValue(context: FieldConstructionContext): String {
-        return elementBuilder.asJavaFlatValue(context.copy(targetElement = targetElement))
-    }
-
-    override fun asKotlinFlatValue(context: FieldConstructionContext): String {
-        return elementBuilder.asKotlinFlatValue(context.copy(targetElement = targetElement))
-    }
-
-}
 
 object JavaCollectionGenerator {
     fun generateList(): InstantiationFieldBuilder {
@@ -112,7 +91,7 @@ object JavaCollectionGenerator {
     }
 
     private fun createArgument(context: FieldConstructionContext, targetType: PsiType): InstantiationFieldBuilder {
-        return CollectionElementInstantiationFieldBuilder(
+        return NestedElementInstantiationFieldBuilder(
                 elementBuilder = createInstantiationField(
                         context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetType))
                 ),
