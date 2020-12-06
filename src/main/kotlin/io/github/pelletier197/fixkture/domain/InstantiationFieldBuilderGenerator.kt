@@ -77,6 +77,7 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "ArrayList", "java.util.ArrayList" -> JavaCollectionGenerator.generateArrayList()
         "LinkedList", "java.util.LinkedList" -> JavaCollectionGenerator.generateLinkedList()
         "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
+        "Map", "java.util.Map" -> JavaCollectionGenerator.generateMap()
         else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
     }
 }

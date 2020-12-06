@@ -1,6 +1,7 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
@@ -91,9 +92,40 @@ object JavaCollectionGenerator {
         return generateList()
     }
 
-    private fun createCollectionArgument(context: FieldConstructionContext): InstantiationFieldBuilder {
-        val targetType = getListElementType(context) ?: return NullInstantiationField()
+    fun generateMap(): InstantiationFieldBuilder {
+        return CallbackClassInstantiationFieldBuilder(
+                LanguageCallbackValueGenerator(
+                        java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
+                        kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
+                )
+        )
+    }
 
+    private fun createMapKeyBuilder(context: FieldConstructionContext): InstantiationFieldBuilder {
+        return createMapArgument(context, 0)
+    }
+
+    private fun createMapValueBuilder(context: FieldConstructionContext): InstantiationFieldBuilder {
+        return createMapArgument(context, 1)
+    }
+
+    private fun createMapArgument(context: FieldConstructionContext, parameterIndex: Int): InstantiationFieldBuilder {
+        val type = extractType(context) ?: return NullInstantiationField()
+
+        if (type is PsiClassReferenceType) {
+            val parameterTypes = type.reference.typeParameters
+            return createArgument(context, parameterTypes[parameterIndex])
+        }
+
+        return NullInstantiationField()
+    }
+
+    private fun createCollectionArgument(context: FieldConstructionContext): InstantiationFieldBuilder {
+        val targetType = getIterableElementType(context) ?: return NullInstantiationField()
+        return createArgument(context, targetType)
+    }
+
+    private fun createArgument(context: FieldConstructionContext, targetType: PsiType): InstantiationFieldBuilder {
         return CollectionElementInstantiationFieldBuilder(
                 elementBuilder = createInstantiationField(
                         context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetType))
@@ -102,12 +134,16 @@ object JavaCollectionGenerator {
         )
     }
 
-    private fun getListElementType(context: FieldConstructionContext): PsiType? {
+    private fun extractType(context: FieldConstructionContext): PsiType? {
         return when (val element = context.targetElement.element) {
-            is PsiParameter -> extractListElementTypeFromType(element.type)
-            is PsiType -> extractListElementTypeFromType(element)
+            is PsiParameter -> element.type
+            is PsiType -> element
             else -> null
         }
+    }
+
+    private fun getIterableElementType(context: FieldConstructionContext): PsiType? {
+        return extractType(context)?.let { extractListElementTypeFromType(it) }
     }
 
 //    private fun extractListElementClass(element: PsiParameter): PsiClass? {

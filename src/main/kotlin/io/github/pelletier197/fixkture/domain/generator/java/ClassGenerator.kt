@@ -3,6 +3,7 @@ package io.github.pelletier197.fixkture.domain.generator.java
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
+import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.*
 import io.github.pelletier197.fixkture.domain.generator.CallbackClassInstantiationFieldBuilder
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackValueGenerator
@@ -104,11 +105,18 @@ object ClassGenerator {
     private fun convertClassArgumentToInstantiationField(psiParameter: PsiParameter,
                                                          context: ClassInstantiationContext
     ): InstantiationFieldBuilder {
+        if (isRecursive(psiParameter, context)) return NullInstantiationField()
         return ClassParameterInstantiationField(
                 parameter = psiParameter,
                 instantiationField = createInstantiationField(
                         context = context.asClassInstantiationStatementBuilderContext(psiParameter)
                 )
         )
+    }
+
+    private fun isRecursive(psiParameter: PsiParameter, context: ClassInstantiationContext): Boolean {
+        // To avoid stack-overflow when generating the same object recursively
+        val targetParameterClass = PsiUtil.resolveClassInType(psiParameter.type)
+        return targetParameterClass == context.targetClass
     }
 }
