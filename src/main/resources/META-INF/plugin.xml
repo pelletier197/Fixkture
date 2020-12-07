@@ -3,14 +3,13 @@
     <name>Fixkture</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
     <description><![CDATA[
-    Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's you solution!
+    Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's the solution!
 
-    This plugin allow you to generate a fixture of any desired class, for both Kotlin and Java (even though you should consider switching to Kotlin, since is a way far superior language). Fields of this class will be given arbitrary values when being generated.
+    This plugin allows you to generate a fixture of any desired class, for both Kotlin and Java (even though you should consider switching to Kotlin, since is a way far superior language). Fields of this class will be given arbitrary values when being generated.
     <br>
     <b>Usage</b>
     <br>
     Anywhere in your test class, hit <b>ctrl+shift+G</b>. You'll be prompt to select a target class, and the fixture will be automatically resolved!
-    <br>
     <br>
     <b>Generated code</b>
     <br>
@@ -18,7 +17,6 @@
     <li>For classes with ambiguous constructors, you'll be prompt to choose which constructor to take to instantiate the class</li>
     <li>For collections, it will automatically generate a collection of the right type, with one element in it</li>
     <li>Recursive objects are supported. The recursion will however stop at one level</li>
-    <br>
     <br>
     <b>Contribute</b>
     <br>
