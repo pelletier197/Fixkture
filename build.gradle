@@ -41,9 +41,3 @@ publishPlugin {
 patchPluginXml {
     version = System.getProperty("version")
 }
-
-patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
-}

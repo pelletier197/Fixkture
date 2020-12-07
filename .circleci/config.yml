@@ -36,12 +36,6 @@ jobs:
       - *restore-cache
       - run: ./gradlew dependencies
       - *save-cache
-  tests:
-    <<: *defaults
-    steps:
-      - run-with-dependencies:
-          steps:
-            - run: ./gradlew test coveralls --info
   lint:
     <<: *defaults
     steps:
@@ -53,28 +47,17 @@ jobs:
     steps:
       - run-with-dependencies:
           steps:
-            - run: git config user.email "circle-ci@pipeline.com"
-            - run: git config user.name "Circle CI"
-            - run: ORG_GRADLE_PROJECT_signingKey=$(echo $ORG_GRADLE_PROJECT_signingKey | base64 -d) ./gradlew core:publish -Pversion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
-            - run: ./gradlew closeAndReleaseRepository
-            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -PreleaseVersion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
-            - run: git checkout master
-            - run: git pull origin $CIRCLE_BRANCH
-            - run: git push
+            - run: ./gradlew publishPlugin -Pversion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
 workflows:
   version: 2.1
-  build-test-verify-deploy:
+  build-verify-deploy:
     jobs:
       - create-cache
-      - tests:
-          requires:
-            - create-cache
       - lint:
           requires:
             - create-cache
       - deploy:
           requires:
-            - tests
             - lint
           filters:
             branches:
