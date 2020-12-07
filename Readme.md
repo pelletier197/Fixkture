@@ -17,11 +17,11 @@ data class Example(
 ```
 
 ### Kotlin
-The generated fixture will look like this in kotlin
+The generated fixture will look like this
 ```kotlin
 val example: Example = Example(first = "first", second = listOf("second"))
 ```
-The library will use standard library functions to achieve fixture generation is as less code as possible, white keeping the fixture extremely readable.
+The library will use standard library functions to achieve fixture generation in as less code as possible, white keeping the fixture extremely readable.
 
 ### Java
 Here is be the output code for the exact same class in Java
