@@ -15,6 +15,7 @@ data class Example(
     val second: List<String>
 )
 ```
+> This is a really simple class, but the plugin will easily support generating an extremely complex object with nested objects in it.
 
 ### Kotlin
 The generated fixture will look like this
