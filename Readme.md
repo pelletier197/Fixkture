@@ -1,2 +1,4 @@
+![Version](http://phpstorm.espend.de/badge/15520/version)
+![Downloads](http://phpstorm.espend.de/badge/15520/downloads)
+
 # Fixkture
-<iframe frameborder="none" width="245px" height="48px" src="https://plugins.jetbrains.com/embeddable/install/15520"></iframe>
