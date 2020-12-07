@@ -84,6 +84,8 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "LinkedList", "java.util.LinkedList" -> JavaCollectionGenerator.generateLinkedList()
         "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
         "Map", "java.util.Map" -> JavaCollectionGenerator.generateMap()
+        "HashMap", "java.util.HashMap" -> JavaCollectionGenerator.generateHashMap()
+        "TreeMap", "java.util.TreeMap" -> JavaCollectionGenerator.generateTreeMap()
         else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
     }
 }

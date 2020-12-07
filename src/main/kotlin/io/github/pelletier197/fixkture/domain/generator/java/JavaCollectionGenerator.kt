@@ -71,6 +71,22 @@ object JavaCollectionGenerator {
         )
     }
 
+    fun generateHashMap(): InstantiationFieldBuilder {
+        val mapBuilder = generateMap()
+        return LanguageCallbackInstantiationFieldBuilder(
+            java = { context -> "java.util.HashMap<>(${mapBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "HashMap(${mapBuilder.asKotlinFlatValue(context)})" }
+        )
+    }
+
+    fun generateTreeMap(): InstantiationFieldBuilder {
+        val mapBuilder = generateMap()
+        return LanguageCallbackInstantiationFieldBuilder(
+            java = { context -> "java.util.TreeMap<>(${mapBuilder.asJavaFlatValue(context)})" },
+            kotlin = { context -> "TreeMap(${mapBuilder.asKotlinFlatValue(context)})" }
+        )
+    }
+
     private fun createMapKeyBuilder(context: FieldConstructionContext): InstantiationFieldBuilder {
         return createMapArgument(context, 0)
     }
