@@ -24,6 +24,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>1.1.0</b>
+    <li>Add support for HashMap and TreeMap</li>
     <b>1.0.0</b>
     <li>Initial implementations for collections, primitive types, objects, recursive objects and common Java STL types</li>
     ]]></change-notes>
