@@ -34,7 +34,12 @@ intellij {
 }
 
 publishPlugin {
+    token System.getenv("PUBLISH_TOKEN")
+    channels 'Test'
+}
 
+patchPluginXml {
+    version = System.getProperty("version")
 }
 
 patchPluginXml {

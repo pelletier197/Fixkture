@@ -2,10 +2,28 @@
     <id>io.github.pelletier197.fixkture</id>
     <name>Fixkture</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
-
     <description><![CDATA[
-    Kotlin and Java Fixture Generator. This plugin allow you to generate a fixture of any desired class. Fields of this class will be given arbitrary values when being generated.<br>
+    Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's you solution!
+
+    This plugin allow you to generate a fixture of any desired class, for both Kotlin and Java (even though you should consider switching to Kotlin, since is a way far superior language). Fields of this class will be given arbitrary values when being generated.<br>
+
+    <b>Usage</b>
+    Anywhere in your test class, hit <b>ctrl+shift+G</b>. You'll be prompt to select a target class, and the fixture will be automatically resolved!
+
+    <b>Generated code</b>
+    This plugin supports complex data models and most common types from Java/Kotlin Standard Library
+    <li>For classes with ambiguous constructors, you'll be prompt to choose which constructor to take to instantiate the class</li>
+    <li>For collections, it will automatically generate a collection of the right type, with one element in it</li>
+    <li>Recursive objects are supported. The recursion will however stop at one level</li>
+
+    <b>Contribute</b>
+    Feel free to create an issue on <a href="https://github.com/pelletier197/Fixkture">Github</a> or even to open your own PR. I developed this project for personal usage, but i'm open to suggestions or improvement ideas.
     ]]></description>
+
+    <change-notes><![CDATA[
+    <b>1.0.0</b>
+    <li>Initial implementations for collections, primitive types, objects, recursive objects and common Java STL types</li>
+    ]]></change-notes>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
