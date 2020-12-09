@@ -3,7 +3,7 @@
     <name>Fixkture</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 
-    <idea-version since-build="193"/>
+    <idea-version since-build="202"/>
 
     <description><![CDATA[
     Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's the solution!
