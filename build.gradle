@@ -29,6 +29,7 @@ intellij {
     version '2020.2.3'
     type 'IC'
     plugins = ['java', 'Kotlin']
+    updateSinceUntilBuild = false
 }
 
 publishPlugin {
