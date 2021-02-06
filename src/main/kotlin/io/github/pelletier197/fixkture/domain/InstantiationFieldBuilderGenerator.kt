@@ -11,6 +11,7 @@ import io.github.pelletier197.fixkture.domain.generator.PrimitiveGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.ClassGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaArrayGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaCollectionGenerator
+import io.github.pelletier197.fixkture.domain.generator.java.JavaEnumGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaLibraryGenerator
 import io.github.pelletier197.fixkture.domain.generator.java.JavaTimeGenerator
 
@@ -86,7 +87,10 @@ private fun handlePsiClass(element: PsiClass, context: PsiElementInstantiationSt
         "Map", "java.util.Map" -> JavaCollectionGenerator.generateMap()
         "HashMap", "java.util.HashMap" -> JavaCollectionGenerator.generateHashMap()
         "TreeMap", "java.util.TreeMap" -> JavaCollectionGenerator.generateTreeMap()
-        else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
+        else -> when (element.isEnum) {
+            true -> JavaEnumGenerator.generateEnum()
+            else -> ClassGenerator.generateClass(context.asClassInstantiationContext(element))
+        }
     }
 }
 

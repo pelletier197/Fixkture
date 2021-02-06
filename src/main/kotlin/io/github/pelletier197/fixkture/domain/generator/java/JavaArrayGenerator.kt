@@ -14,8 +14,20 @@ import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
 object JavaArrayGenerator {
     fun generateArray(): InstantiationFieldBuilder {
         return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "new ${generateJavaArrayTypeString(context)}[] { ${generateArrayElement(context).asJavaFlatValue(context)} }" },
-            kotlin = { context -> "${selectKotlinArrayGeneratorFunction(context)}(${generateArrayElement(context).asKotlinFlatValue(context)})" }
+            java = { context ->
+                "new ${generateJavaArrayTypeString(context)}[] { ${
+                generateArrayElement(context).asJavaFlatValue(
+                    context
+                )
+                } }"
+            },
+            kotlin = { context ->
+                "${selectKotlinArrayGeneratorFunction(context)}(${
+                generateArrayElement(context).asKotlinFlatValue(
+                    context
+                )
+                })"
+            }
         )
     }
 
@@ -42,13 +54,6 @@ object JavaArrayGenerator {
             }
             else -> "arrayOf"
         }
-    }
-
-    // Converts Object[] to Array<Object>
-    private fun convertJavaArrayTypeStringToKotlin(javaString: String): String {
-        val index = javaString.lastIndexOf("[]")
-        if (index < 0) return javaString
-        return convertJavaArrayTypeStringToKotlin("Array<${javaString.removeRange(index, index + 2)}>")
     }
 
     private fun generateArrayElement(context: FieldConstructionContext): InstantiationFieldBuilder {
