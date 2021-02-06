@@ -27,6 +27,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>1.3.0</b>
+    <li>Add support for enum values</li>
     <b>1.1.0</b>
     <li>Add support for HashMap and TreeMap</li>
     <b>1.0.0</b>
