@@ -3,7 +3,7 @@
     <name>Fixkture</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 
-    <idea-version since-build="202"/>
+    <idea-version since-build="202" />
 
     <description><![CDATA[
     Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's the solution!
@@ -27,6 +27,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>1.3.1</b>
+    <li>Fix intellij compatibility</li>
     <b>1.3.0</b>
     <li>Add support for enum values</li>
     <b>1.1.0</b>
@@ -37,9 +39,9 @@
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
-    <depends>org.jetbrains.kotlin</depends>
+<!--    <depends>com.intellij.modules.platform</depends>-->
+<!--    <depends>com.intellij.modules.java</depends>-->
+<!--    <depends>org.jetbrains.kotlin</depends>-->
 
     <actions>
         <action id="io.github.pelletier197.fixkture.api.GenerateFixtureAction"
