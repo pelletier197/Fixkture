@@ -10,7 +10,6 @@ plugins {
 }
 
 group = "io.github.pelletier197"
-version = System.getProperty("version")
 
 repositories {
     mavenCentral()
