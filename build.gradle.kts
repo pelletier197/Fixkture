@@ -1,8 +1,7 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 plugins {
-    val kotlinVersion = "1.4.21"
+    val kotlinVersion = "1.4.31"
     val gradleIntellijVersion = "0.7.2"
     val ktlintVersion = "10.0.0"
     id("org.jetbrains.kotlin.jvm") version kotlinVersion
@@ -17,38 +16,28 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType<KotlinCompile<KotlinCommonOptions>> {
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
+        languageVersion = "1.4"
+        apiVersion = "1.4"
         freeCompilerArgs = freeCompilerArgs + listOf("-Xjsr305=strict")
+        jvmTarget = "11"
     }
 }
 
-//
-// java {
-//
-// }
-// sourceCompatibility = JavaVersion.11
-// targetCompatibility = '11'
-//
-// compileKotlin {
-//     kotlinOptions {
-//         jvmTarget = '11'
-//     }
-// }
-//
-// compileTestKotlin {
-//     kotlinOptions {
-//         jvmTarget = '11'
-//     }
-// }
-//
-// intellij {
-//     version = "2020.2.3"
-//     type = "IC"
-//     plugins = ["java", "Kotlin"]
-//     updateSinceUntilBuild = false
-// }
-//
+intellij {
+    version = "2020.2.3"
+    type = "IC"
+    setPlugins("java", "Kotlin")
+    updateSinceUntilBuild = false
+    pluginName = "Fixkture"
+}
+
 // publishPlugin {
 //     token =  System.getenv("PUBLISH_TOKEN")
 //     channels = "Stable"
