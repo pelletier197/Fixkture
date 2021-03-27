@@ -7,10 +7,10 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version kotlinVersion
     id("org.jetbrains.intellij") version gradleIntellijVersion
     id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
-    id("java")
 }
 
 group = "io.github.pelletier197"
+version = System.getProperty("version")
 
 repositories {
     mavenCentral()
@@ -36,6 +36,11 @@ intellij {
     setPlugins("java", "Kotlin")
     updateSinceUntilBuild = false
     pluginName = "Fixkture"
+}
+
+tasks.withType<org.jetbrains.intellij.tasks.PublishTask> {
+    setToken(System.getenv("PUBLISH_TOKEN"))
+    setChannels("Stable")
 }
 
 // publishPlugin {

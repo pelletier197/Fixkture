@@ -37,12 +37,6 @@
     <li>Initial implementations for collections, primitive types, objects, recursive objects and common Java STL types</li>
     ]]></change-notes>
 
-    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-<!--    <depends>com.intellij.modules.platform</depends>-->
-<!--    <depends>com.intellij.modules.java</depends>-->
-<!--    <depends>org.jetbrains.kotlin</depends>-->
-
     <actions>
         <action id="io.github.pelletier197.fixkture.api.GenerateFixtureAction"
                 class="io.github.pelletier197.fixkture.api.GenerateFixtureAction" text="Fixture"
