@@ -7,6 +7,7 @@ import com.intellij.ide.util.TreeClassChooserFactory
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.search.GlobalSearchScope
 
 fun selectTargetTargetClass(project: Project): PsiClass? {
     val classChooserFactory = TreeClassChooserFactory.getInstance(project)
@@ -26,7 +27,14 @@ fun selectTargetConstructor(psiClass: PsiClass, project: Project): PsiMethod? {
 }
 
 fun selectInterfaceImplementationClass(interfaceClass: PsiClass, project: Project): PsiClass? {
-    TODO()
+    val dialog = TreeClassChooserFactory.getInstance(project).createInheritanceClassChooser(
+        "Target class for interface `${interfaceClass.name}`",
+        GlobalSearchScope.allScope(project),
+        interfaceClass,
+        null
+    )
+    dialog.showDialog()
+    return dialog.selected
 }
 
 fun selectConstructorInList(constructors: Array<PsiMethod>, project: Project): PsiMethod? {
