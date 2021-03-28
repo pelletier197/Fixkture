@@ -32,9 +32,9 @@ tasks.withType<KotlinJvmCompile> {
 intellij {
     version = "2020.2.3"
     type = "IC"
-    setPlugins("java", "Kotlin")
+    setPlugins("Kotlin")
     updateSinceUntilBuild = false
-    pluginName = "Fixkture"
+    pluginName = "Mockkator"
 }
 
 tasks.withType<org.jetbrains.intellij.tasks.PublishTask> {
