@@ -27,14 +27,19 @@
     ]]></description>
 
     <change-notes><![CDATA[
-    <b>1.3.1</b>
-    <li>Fix intellij compatibility</li>
-    <b>1.3.0</b>
-    <li>Add support for enum values</li>
-    <b>1.1.0</b>
-    <li>Add support for HashMap and TreeMap</li>
-    <b>1.0.0</b>
-    <li>Initial implementations for collections, primitive types, objects, recursive objects and common Java STL types</li>
+    <div>
+        <b>1.4.0</b>
+        <li>Add interface fixture generation support with target implementation selector</li>
+        <li>Use code style name suggestion</li>
+        <b>1.3.1</b>
+        <li>Fix intellij compatibility</li>
+        <b>1.3.0</b>
+        <li>Add support for enum values</li>
+        <b>1.1.0</b>
+        <li>Add support for HashMap and TreeMap</li>
+        <b>1.0.0</b>
+        <li>Initial implementations for collections, primitive types, objects, recursive objects and common Java STL types</li>
+    </div>
     ]]></change-notes>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
