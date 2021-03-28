@@ -11,8 +11,7 @@ class InstantiationStatementGenerator(
 ) {
     fun createKotlinStatement(): String {
         val context = getFieldConstructionContext()
-        val targetClass = element as PsiClass
-        return "val ${context.fieldName}: ${targetClass.qualifiedName} = ${fieldBuilder.asKotlinFlatValue(context)}"
+        return "val ${context.fieldName} = ${fieldBuilder.asKotlinFlatValue(context)}"
     }
 
     fun createJavaStatement(): String {
