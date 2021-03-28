@@ -7,7 +7,7 @@
 </p>
 
 # Fixkture
-Fixkture is an Intellij Plugin to generate test fixtures that support both Java and Kotlin. It helps generate complex objects from a target class, which may be long and exhausting to do manually, especially for big objects. It does so by providing arbitrary parameters in the object's constructor.
+Fixkture is an Intellij Plugin to generate test fixtures that supports both Java and Kotlin. It helps generate complex objects from a target class, which may be long and exhausting to do manually, especially for big objects. It does so by providing arbitrary parameters in the object's constructor.
 
 ## Example
 Given the sample data class
