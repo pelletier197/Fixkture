@@ -25,12 +25,14 @@ data class FieldConstructionContext(
     val targetElement: TargetElement,
     val constructorSelector: ConstructorSelectionFunction,
     val interfaceImplementationSelector: InterfaceImplementationSelector,
+    val variableNameGenerator: VariableNameGenerator,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: TargetElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
             targetElement = element,
             constructorSelector = this.constructorSelector,
             interfaceImplementationSelector = this.interfaceImplementationSelector,
+            variableNameGenerator = this.variableNameGenerator,
         )
     }
 }

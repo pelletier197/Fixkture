@@ -1,11 +1,9 @@
 package io.github.pelletier197.fixkture.domain
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiUtil
 
 class InstantiationStatementGenerator(
-    private val element: PsiElement,
+    private val element: PsiClass,
     private val fieldBuilder: InstantiationFieldBuilder,
     private val context: PsiElementInstantiationStatementBuilderContext
 ) {
@@ -16,12 +14,12 @@ class InstantiationStatementGenerator(
 
     fun createJavaStatement(): String {
         val context = getFieldConstructionContext()
-        val targetClass = element as PsiClass
+        val targetClass = element
         return "public static final ${targetClass.qualifiedName} ${context.fieldName} = ${fieldBuilder.asJavaFlatValue(context)};"
     }
 
     private fun generateFieldName(): String {
-        return PsiUtil.getName(element)?.decapitalize() ?: "fixture"
+        return context.variableNameGenerator(element)
     }
 
     private fun getFieldConstructionContext(): FieldConstructionContext {
@@ -30,11 +28,12 @@ class InstantiationStatementGenerator(
             targetElement = TargetElement.of(element),
             constructorSelector = context.constructorSelector,
             interfaceImplementationSelector = context.interfaceImplementationSelector,
+            variableNameGenerator = context.variableNameGenerator,
         )
     }
 }
 
-fun generateInstantiationStatement(element: PsiElement, context: PsiElementInstantiationStatementBuilderContext): InstantiationStatementGenerator {
+fun generateInstantiationStatement(element: PsiClass, context: PsiElementInstantiationStatementBuilderContext): InstantiationStatementGenerator {
     val fieldBuilder = createInstantiationField(context)
     return InstantiationStatementGenerator(
         fieldBuilder = fieldBuilder,

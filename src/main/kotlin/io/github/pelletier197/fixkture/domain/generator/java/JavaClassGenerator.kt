@@ -11,6 +11,7 @@ import io.github.pelletier197.fixkture.domain.InterfaceImplementationSelector
 import io.github.pelletier197.fixkture.domain.NullInstantiationField
 import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.TargetElement
+import io.github.pelletier197.fixkture.domain.VariableNameGenerator
 import io.github.pelletier197.fixkture.domain.createInstantiationField
 import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
 import org.jetbrains.kotlin.asJava.classes.KtUltraLightClass
@@ -54,12 +55,14 @@ data class ClassInstantiationContext(
     val targetClass: PsiClass,
     val constructorSelector: ConstructorSelectionFunction,
     val interfaceImplementationSelector: InterfaceImplementationSelector,
+    val variableNameGenerator: VariableNameGenerator,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
             targetElement = TargetElement.of(element),
-            constructorSelector = this.constructorSelector,
+            constructorSelector = constructorSelector,
             interfaceImplementationSelector = interfaceImplementationSelector,
+            variableNameGenerator = variableNameGenerator
         )
     }
 

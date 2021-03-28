@@ -7,7 +7,10 @@ import com.intellij.ide.util.TreeClassChooserFactory
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.codeStyle.JavaCodeStyleManager
+import com.intellij.psi.codeStyle.VariableKind
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.PsiTypesUtil
 
 fun selectTargetTargetClass(project: Project): PsiClass? {
     val classChooserFactory = TreeClassChooserFactory.getInstance(project)
@@ -35,6 +38,11 @@ fun selectInterfaceImplementationClass(interfaceClass: PsiClass, project: Projec
     )
     dialog.showDialog()
     return dialog.selected
+}
+
+fun suggestVariableName(targetType: PsiClass, project: Project): String {
+    val codeStyleManager = JavaCodeStyleManager.getInstance(project)
+    return codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, null, PsiTypesUtil.getClassType(targetType)).names.firstOrNull() ?: "fixture"
 }
 
 fun selectConstructorInList(constructors: Array<PsiMethod>, project: Project): PsiMethod? {
