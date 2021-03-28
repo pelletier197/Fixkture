@@ -23,12 +23,14 @@ class NullInstantiationField : LanguageCallbackInstantiationFieldBuilder(
 data class FieldConstructionContext(
     val fieldName: String,
     val targetElement: TargetElement,
-    val constructorSelector: ConstructorSelectionFunction
+    val constructorSelector: ConstructorSelectionFunction,
+    val interfaceImplementationSelector: InterfaceImplementationSelector,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: TargetElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
             targetElement = element,
-            constructorSelector = this.constructorSelector
+            constructorSelector = this.constructorSelector,
+            interfaceImplementationSelector = this.interfaceImplementationSelector,
         )
     }
 }

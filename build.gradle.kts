@@ -41,8 +41,3 @@ tasks.withType<org.jetbrains.intellij.tasks.PublishTask> {
     setToken(System.getenv("PUBLISH_TOKEN"))
     setChannels("Stable")
 }
-
-// publishPlugin {
-//     token =  System.getenv("PUBLISH_TOKEN")
-//     channels = "Stable"
-// }

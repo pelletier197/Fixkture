@@ -30,6 +30,7 @@ class InstantiationStatementGenerator(
             fieldName = generateFieldName(),
             targetElement = TargetElement.of(element),
             constructorSelector = context.constructorSelector,
+            interfaceImplementationSelector = context.interfaceImplementationSelector,
         )
     }
 }

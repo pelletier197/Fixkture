@@ -7,6 +7,7 @@ import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.ConstructorSelectionFunction
 import io.github.pelletier197.fixkture.domain.FieldConstructionContext
 import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
+import io.github.pelletier197.fixkture.domain.InterfaceImplementationSelector
 import io.github.pelletier197.fixkture.domain.NullInstantiationField
 import io.github.pelletier197.fixkture.domain.PsiElementInstantiationStatementBuilderContext
 import io.github.pelletier197.fixkture.domain.TargetElement
@@ -52,12 +53,18 @@ class NullClassArgumentInstantiationField(
 data class ClassInstantiationContext(
     val targetClass: PsiClass,
     val constructorSelector: ConstructorSelectionFunction,
+    val interfaceImplementationSelector: InterfaceImplementationSelector,
 ) {
     fun asClassInstantiationStatementBuilderContext(element: PsiElement): PsiElementInstantiationStatementBuilderContext {
         return PsiElementInstantiationStatementBuilderContext(
             targetElement = TargetElement.of(element),
-            constructorSelector = this.constructorSelector
+            constructorSelector = this.constructorSelector,
+            interfaceImplementationSelector = interfaceImplementationSelector,
         )
+    }
+
+    fun forClass(targetClass: PsiClass): ClassInstantiationContext {
+        return copy(targetClass = targetClass)
     }
 }
 
@@ -92,6 +99,7 @@ private fun getKotlinParametersString(targetClass: PsiClass, arguments: List<Ins
 object ClassGenerator {
     fun generateClass(context: ClassInstantiationContext): InstantiationFieldBuilder {
         val targetClass = context.targetClass
+        if (targetClass.isInterface) return handleInterfaceType(context)
         val targetConstructor = context.constructorSelector(targetClass) ?: return NullInstantiationField()
 
         val arguments = targetConstructor.parameterList.parameters.toList()
@@ -102,6 +110,14 @@ object ClassGenerator {
         return ClassInstantiationField(
             targetClass = targetClass,
             argumentsFields = instantiationFields
+        )
+    }
+
+    private fun handleInterfaceType(context: ClassInstantiationContext): InstantiationFieldBuilder {
+        val implementation =
+            context.interfaceImplementationSelector(context.targetClass) ?: return NullInstantiationField()
+        return generateClass(
+            context.forClass(targetClass = implementation)
         )
     }
 

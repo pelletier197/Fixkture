@@ -25,6 +25,10 @@ fun selectTargetConstructor(psiClass: PsiClass, project: Project): PsiMethod? {
     return constructors.getOrNull(0)
 }
 
+fun selectInterfaceImplementationClass(interfaceClass: PsiClass, project: Project): PsiClass? {
+    TODO()
+}
+
 fun selectConstructorInList(constructors: Array<PsiMethod>, project: Project): PsiMethod? {
     val constructorChooser = MemberChooserBuilder<ClassMember>(project)
         .also { it.allowEmptySelection(false) }

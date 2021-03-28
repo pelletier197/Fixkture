@@ -9,7 +9,8 @@ abstract class CBasedLanguageFixtureGenerator : FixtureGenerator {
         val targetClass = selectTargetTargetClass(project) ?: return
 
         val statementGenerator = RecursiveClassInstantiationStatementGeneratorFactory(
-            constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) }
+            constructorSelector = { psiClass -> selectTargetConstructor(psiClass, project) },
+            interfaceImplementationSelector = { psiClass -> selectInterfaceImplementationClass(psiClass, project) }
         ).createInstantiationStatement(
             targetElement = targetClass
         )
