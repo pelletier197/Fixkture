@@ -32,7 +32,7 @@ tasks.withType<KotlinJvmCompile> {
 intellij {
     version = "2020.2.3"
     type = "IC"
-    setPlugins("Kotlin")
+    setPlugins("java", "Kotlin")
     updateSinceUntilBuild = false
     pluginName = "Fixkture"
 }
