@@ -34,7 +34,7 @@ intellij {
     type = "IC"
     setPlugins("Kotlin")
     updateSinceUntilBuild = false
-    pluginName = "Mockkator"
+    pluginName = "Fixkture"
 }
 
 tasks.withType<org.jetbrains.intellij.tasks.PublishTask> {
