@@ -22,7 +22,7 @@ data class Example(
 ### Kotlin
 The generated fixture will look like this
 ```kotlin
-val example: Example = Example(first = "first", second = listOf("second"))
+val example = Example(first = "first", second = listOf("second"))
 ```
 The library will use standard library functions to achieve fixture generation in as little code as possible while keeping the fixture extremely readable.
 
