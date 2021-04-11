@@ -1,6 +1,7 @@
 package io.github.pelletier197.fixkture.domain.generator.java
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiUtil
 import io.github.pelletier197.fixkture.domain.FieldConstructionContext
@@ -36,6 +37,7 @@ object JavaEnumGenerator {
 
     private fun extractClass(context: FieldConstructionContext): Any {
         val element = context.targetElement.element
+        if (element is PsiParameter) return PsiUtil.resolveClassInType(element.type) ?: element
         if (element is PsiType) return PsiUtil.resolveClassInType(element) ?: element
         return element
     }
